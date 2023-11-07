@@ -6,7 +6,7 @@ class Board {
 public:
     Board(); // constructor
     void draw();
-
+    void deallocate();
 
 
 private:
@@ -17,6 +17,7 @@ private:
     static constexpr int size_of_ships[no_of_ships] = {3, 4, 4, 5, 6, 10};
 
     // instance variables 
+    int (*ships[no_of_ships])[2];
     int state[size_of_board][size_of_board];
 };
 
