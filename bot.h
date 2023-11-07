@@ -5,6 +5,10 @@
 
 class Bot : public Board {
 
+public:
+    void setup();
+
+private:
 };
 
 

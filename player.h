@@ -5,6 +5,16 @@
 
 class Player : public Board {
 
+public:
+    void setup();
+
+
+
+private:
+
+
+
+
 };
 
 

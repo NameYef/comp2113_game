@@ -7,7 +7,7 @@ using namespace std;
 Board::Board() {
     for (int i=0; i< Board::size_of_board; i++){
             for (int j=0; j< Board::size_of_board; j++){
-                this->state[i][j] = -2;
+                this->state[i][j] = 1;
             }
         }
 }

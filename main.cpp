@@ -1,11 +1,16 @@
-// #include "manager.h"
+#include "manager.h"
 #include "board.h"
 
 // testing board initiation and drawing
 int main() {
-    Board board = Board();
-    board.draw();
+    Manager* manager = new Manager();
 
+    while (true) {
+        manager->run();
+       
+    }
+
+    delete manager;
     return 0;
 
 }
