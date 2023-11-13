@@ -1,8 +1,6 @@
-#ifndef BOARDV_H
-#define BOARDV_H
-#include <vector>
+#ifndef BOARD_H
+#define BOARD_H
 
-using namespace std;
 
 class Board {
 public:
@@ -16,10 +14,10 @@ private:
     // static variables 
     static constexpr int size_of_board = 19;
     static constexpr int no_of_ships = 6;
-    
+    static constexpr int size_of_ships[no_of_ships] = {3, 4, 4, 5, 6, 10};
 
     // instance variables 
-    vector<vector<vector<int>>> ships;
+    int (*ships[no_of_ships])[2];
     int state[size_of_board][size_of_board];
 };
 

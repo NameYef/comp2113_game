@@ -7,7 +7,7 @@ Board.updateOccupied()
 Board.bomb(x,y)         --> return T when not revealed/ bombed, else F
 */
 
-#include "board.h"
+
 #include <iostream>
 
 using namespace std;

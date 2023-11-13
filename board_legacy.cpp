@@ -1,27 +1,21 @@
-#include "board.h"
+#include "board_legacy.h"
 #include <iostream>
 
 using namespace std;
 
 
 Board::Board() {
-    vector<int> size_of_ships = {3, 4, 4, 5, 6, 10};
     for (int i=0; i< Board::size_of_board; i++){
         for (int j=0; j< Board::size_of_board; j++){
             this->state[i][j] = 1;
         }
     }
-    // ships is still 3D, elements accessed through ships[i][j][k]
-    // if ship part is blown then can remove that element, the remaining percentage can be shown by ships[i].size() / ships[i].capacity()
-    for (int i = 0; i < no_of_ships; i++) {
-        vector<vector<int>> temp1;
-        for (int j = 0; j < size_of_ships[i]; j++) {
-            vector<int> temp2;
-            temp2.push_back(-1);
-            temp2.push_back(-1);
-            temp1.push_back(temp2);
+    for (int i=0; i<no_of_ships; i++){
+        this->ships[i] = new int[size_of_ships[i]][2];
+        for (int j=0; j<size_of_ships[i]; j++){
+            this->ships[i][j][0] = -1;
+            this->ships[i][j][1] = -1;
         }
-        ships.push_back(temp1);
     }
 }
 
@@ -100,3 +94,8 @@ void Board::draw() {
     cout << endl;
 }
 
+void Board::deallocate() {
+    for (int i=0; i<no_of_ships; i++){
+        delete[] this->ships[i];
+    }
+}
