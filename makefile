@@ -13,10 +13,10 @@ manager.o: manager.cpp manager.h
 	g++ $(FLAGS) -c $<
 
 main: board.o bot.o player.o manager.o main.cpp
-	g++ $(FLAGS) $^ -o $@
+	g++ $(FLAGS) $^ -o $@ -lncursesw
 
 clean:
-	rm -f main manager.o player.o bot.o board.o
+	rm -f main manager.o player.o bot.o board.o 
 
 .PHONY: clean
 

@@ -6,8 +6,8 @@ using namespace std;
 
 Board::Board() {
     vector<int> size_of_ships = {3, 4, 4, 5, 6, 10};
-    for (int i=0; i< Board::size_of_board; i++){
-        for (int j=0; j< Board::size_of_board; j++){
+    for (int i=0; i< size_of_board; i++){
+        for (int j=0; j< size_of_board; j++){
             this->state[i][j] = 1;
         }
     }
@@ -25,78 +25,158 @@ Board::Board() {
     }
 }
 
-void Board::draw() {
-    //first line
-    cout << "   ";
-    for (int i=0; i<Board::size_of_board; i++){
-        cout << "+---";
-    }
-    cout << "+" << endl;
+void Board::draw(WINDOW* win) {
+    refresh();
+    box(win, 0, 0);
+    wrefresh(win);
+    int game_row = 2;
+    mvwprintw(win, 1, 1, "   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+    for (int i = 0; i < size_of_board; i++) {
 
-    // iterate through each slot and its underline(?)
-    for (int y=0; y<Board::size_of_board; y++){
-        // alphabet label
-        char c = 'A'+y;
-        cout << " " << c << " "; 
+        int column = 1;
+        // handling the row name
+        char row_name = 'A' + i;
+        mvwprintw(win, game_row, 1, " %c |", row_name);
+        column += 4;
+        
+        for (int j = 0; j < size_of_board; j++) {
 
-        for (int x=0; x<Board::size_of_board; x++){
-            // occ and bombed
-            if (this->state[x][y] == 4){
-                cout << "| O ";
+            switch (state[i][j]) {
+                case -1:
+                    mvwprintw(win, game_row, column, " ? |");
+                    column += 4;
+                    break;
+                case 1:
+                    mvwprintw(win, game_row, column, "   |");
+                    column += 4;
+                    break;
+                case 2:
+                    mvwprintw(win, game_row, column, "███|");
+                    column += 4;
+                    break;
+                case 3:
+                    mvwprintw(win, game_row, column, " + |");
+                    column += 4;
+                    break;  
             }
-            // bombed but NOT occ
-            else if (this->state[x][y] == 3){
-                cout << "| X ";
-            }
-            // if revealed
-            else if (this->state[x][y] > 0){
-                // if occ
-                if (this->state[x][y] == 2){
-                    if (x>0 && this->state[x-1][y] == 2){
-                        // if there is a revealed occ on the left, print this
-                        cout << "████";
-                    }
-                    else {
-                        // ifthere is NOT a revealed occ on the left, print this
-                        cout << "|███";
-                    }
-                }
-                // not occ
-                else {
-                    cout << "|   "; 
-                }
-            }
-            // unrevealed
-            else {
-                cout << "| ? ";
-            }
+
         }
-        cout << "|" <<endl;
 
-        cout << "   " ;
-        for (int x=0; x<Board::size_of_board; x++){
-            // if this slot and below are both revealed occ
-            if (this->state[x][y] == 2 && y<(Board::size_of_board-1) && this->state[y+1][x] == 2){
-                // if slot to the left is revealed occ
-                if (x>0 && this->state[x-1][y] == 2){
-                    cout << "████";
-                }
-                else {
-                    cout << "+███";
-                }
-            }
-            else {
-                cout << "+---";
-            }
-        }
-        cout << "+" << endl;
+        mvwprintw(win, game_row + 1, 1, "   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
+        game_row += 2;
+        
     }
+    wrefresh(win);
+    refresh();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // //first line
+    // cout << "   ";
+    // for (int i=0; i<size_of_board; i++){
+    //     cout << "+---";
+    // }
+    // cout << "+" << endl;
+
+    // // iterate through each slot and its underline(?)
+    // for (int y=0; y<Board::size_of_board; y++){
+    //     // alphabet label
+    //     char c = 'A'+y;
+    //     cout << " " << c << " "; 
+
+    //     for (int x=0; x<Board::size_of_board; x++){
+    //         // occ and bombed
+    //         if (this->state[x][y] == 4){
+    //             cout << "| O ";
+    //         }
+    //         // bombed but NOT occ
+    //         else if (this->state[x][y] == 3){
+    //             cout << "| X ";
+    //         }
+    //         // if revealed
+    //         else if (this->state[x][y] > 0){
+    //             // if occ
+    //             if (this->state[x][y] == 2){
+    //                 if (x>0 && this->state[x-1][y] == 2){
+    //                     // if there is a revealed occ on the left, print this
+    //                     cout << "████";
+    //                 }
+    //                 else {
+    //                     // ifthere is NOT a revealed occ on the left, print this
+    //                     cout << "|███";
+    //                 }
+    //             }
+    //             // not occ
+    //             else {
+    //                 cout << "|   "; 
+    //             }
+    //         }
+    //         // unrevealed
+    //         else {
+    //             cout << "| ? ";
+    //         }
+    //     }
+    //     cout << "|" <<endl;
+
+    //     cout << "   " ;
+    //     for (int x=0; x<Board::size_of_board; x++){
+    //         // if this slot and below are both revealed occ
+    //         if (this->state[x][y] == 2 && y<(Board::size_of_board-1) && this->state[y+1][x] == 2){
+    //             // if slot to the left is revealed occ
+    //             if (x>0 && this->state[x-1][y] == 2){
+    //                 cout << "████";
+    //             }
+    //             else {
+    //                 cout << "+███";
+    //             }
+    //         }
+    //         else {
+    //             cout << "+---";
+    //         }
+    //     }
+    //     cout << "+" << endl;
+    // }
     
-    // number label. ? : to make sure align
-    cout << "   ";
-    for (int i=1; i<=Board::size_of_board; i++){
-        cout << " " << i << (i/10>0 ? " " : "  "); 
-    }
-    cout << endl;
+    // // number label. ? : to make sure align
+    // cout << "   ";
+    // for (int i=1; i<=Board::size_of_board; i++){
+    //     cout << " " << i << (i/10>0 ? " " : "  "); 
+    // }
+    // cout << endl;
 }
 

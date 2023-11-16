@@ -1,5 +1,6 @@
 #include "manager.h"
 #include <iostream>
+
 using namespace std;
 
 
@@ -18,11 +19,19 @@ void Manager::game_setup() {
 }
 
 void Manager::gameplay() {
-    this->b->draw();
-    this->p->draw();
-    string a;
-    cout << "press enter to finish attack";
-    getline(cin, a);
+    // this->b->draw();
+    // this->p->draw();
+    // string a;
+    // cout << "press enter to finish attack";
+    // getline(cin, a);
+    int input;
+    do {
+    printw("press up_arrow to quit\n");
+    refresh();
+
+    } while ((input = getch()) != KEY_UP);
+
+    game_state = "quit";
     return;
 }
 
