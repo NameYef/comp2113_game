@@ -41,7 +41,7 @@ void Board::draw(WINDOW* win) {
         
         for (int j = 0; j < size_of_board; j++) {
 
-            switch (state[i][j]) {
+            switch (state[j][i]) {
                 case -1:
                     mvwprintw(win, game_row, column, " ? |");
                     column += 4;
