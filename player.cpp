@@ -153,8 +153,6 @@ void Player::setup() {
     }
 
 
-
-
     //erase the window when finish set up
     werase(win);
     wrefresh(win);
