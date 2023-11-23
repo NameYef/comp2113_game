@@ -20,14 +20,8 @@ void Manager::game_setup() {
 
 void Manager::gameplay() {
 
-    int input;
-    do {
-    printw("press up_arrow to quit\n");
-    refresh();
+// implement turn based fundamental gameplay here
 
-    } while ((input = getch()) != KEY_UP);
-
-    game_state = "quit";
     return;
 }
 
