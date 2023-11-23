@@ -120,7 +120,7 @@ void Player::setup() {
                     break;
                 case KEY_RIGHT:
                     // move the ship right
-                    if (!(head_x + no_of_blocks >= size_of_board)) {
+                    if (!(head_x + 1 >= size_of_board)) {
                     this->state_set(direction, head_x, head_y, no_of_blocks, 1);
                     head_x++;
                     }
