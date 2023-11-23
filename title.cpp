@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <string>
 #include <vector>
+#include "start_title.h"
 using namespace std;
 
 void start_title() {
@@ -43,4 +44,9 @@ void start_title() {
         c = (xMax - 42) / 2;
         r++;
     }
+    keypad(stdscr, TRUE);
+    move(yMax-10,xMax/2-10);
+    printw("press enter to start");
+    if (getch() == '\n')
+        menu();
 }
