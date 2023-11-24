@@ -10,19 +10,20 @@ using namespace std;
 class Manager {
 public:
     Manager();
-
+    ~Manager();
     void game_setup(); // pregame setup
     void gameplay(); // actual gameplay
+    void switch_player();
+    bool check_win();
     void run(); // wrap the whole thing together to run in main
     string game_state; // to know what phase of the game is
 
 private:
-    // creating player and player pointer
-    Player player;
-    Player* p = &player;
-    // creating bot and bot pointer
-    Bot bot;
-    Bot* b = &bot;
+    // creating player and bot pointer
+    Player* player;
+    Bot* bot;
+    
+    
     char previous_player; // this will be used to implement the turn based mechanics
 };
 

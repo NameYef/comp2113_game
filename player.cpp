@@ -89,9 +89,9 @@ void Player::setup() {
 
             // set the state to 3 for the ship location to let player see where the ship currently is
             this->state_set(direction, head_x, head_y, no_of_blocks, 3);
-            this->draw(win);
 
             // input to move the ship
+            this->draw(win);
             input = getch();
             refresh();
 
