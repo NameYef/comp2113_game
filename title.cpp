@@ -47,6 +47,10 @@ void start_title() {
     keypad(stdscr, TRUE);
     move(yMax-10,xMax/2-10);
     printw("press enter to start");
-    if (getch() == '\n')
-        menu();
+    int ch;
+    while ((ch = getch()) != '\n') {}
+    move(yMax - 10, 0);        // Move the cursor to the beginning of the line
+    clrtoeol();       // Clear the entire line
+    refresh();
+    menu();
 }
