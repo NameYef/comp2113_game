@@ -25,6 +25,19 @@ Board::Board() {
     }
 }
 
+bool Board::ship_empty() {
+    for (auto& i : ships) {
+        if (! i.empty()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+const vector<vector<vector<int>>> Board::get_ships() const {
+    return ships;
+}
+
 void Board::draw(WINDOW* win) {
     refresh();
     box(win, 0, 0);
@@ -57,7 +70,15 @@ void Board::draw(WINDOW* win) {
                 case 3:
                     mvwprintw(win, game_row, column, " + |");
                     column += 4;
-                    break;  
+                    break;
+                case 4:
+                    mvwprintw(win, game_row, column, " X |");
+                    column += 4;
+                    break;
+                case 5:
+                    mvwprintw(win, game_row, column, "█X█");
+                    column += 4;
+                    break;
             }
 
         }

@@ -15,6 +15,7 @@ public:
     void gameplay(); // actual gameplay
     void switch_player();
     bool check_win();
+    void draw_status(WINDOW* win, char user);
     void run(); // wrap the whole thing together to run in main
     string game_state; // to know what phase of the game is
 
@@ -25,6 +26,8 @@ private:
     
     
     char previous_player; // this will be used to implement the turn based mechanics
+    int ymax;
+    int xmax;
 };
 
 

@@ -1,7 +1,7 @@
 #include "bot.h"
 #include <iostream>
 #include <random>
-
+#include <iterator>
 using namespace std;
 
 bool Bot::valid(char direction, int head_x, int head_y, int no_of_blocks) {
@@ -109,8 +109,113 @@ void Bot::setup() {
             state[i][j] = 1;
         }
     }
-    
+    // WINDOW* win = newwin(41, 83, 0, 0);
+    // refresh();
+    // this->draw(win);
+    // getch();
+    // werase(win);
+    // wrefresh(win);
+    // delwin(win);
+    // clear();
+    // move(0, 0);
     return;
 
 }
+
+
+bool Bot::hit(int cursor_x, int cursor_y) {
+    for (auto& i : ships) {
+        for (vector<vector<int>>::iterator j = i.begin(); j != i.end(); j++) {
+            if (((*j)[0] == cursor_x) && ((*j)[1] == cursor_y)) {
+                i.erase(j);
+                return true;
+            }
+        };
+    }
+    return false;
+
+}
+void Bot::player_attack(WINDOW* win) {
+    bool attacked = false;
+    int input;
+    while (! attacked) {
+        prev_state = state[attack_cursor_x][attack_cursor_y];
+
+        state[attack_cursor_x][attack_cursor_y] = 3;
+
+        this->draw(win);
+        // mvprintw(47,40,"after %d", after_state);
+        // mvprintw(49,40,"prev %d", prev_state);
+        input = getch();
+        refresh();
+
+        switch (input) {
+                case KEY_UP:
+                    // move the ship upward and change the state of board back to 1 for the current location
+                    if (!(attack_cursor_y - 1 < 0)) {
+                        state[attack_cursor_x][attack_cursor_y] = prev_state;
+                        after_state = state[attack_cursor_x][attack_cursor_y - 1];
+                        attack_cursor_y--;
+                        break;
+                    }
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    break;
+                case KEY_DOWN:
+                    // move the ship down
+                    if (!(attack_cursor_y + 1 >= size_of_board)) {
+                        state[attack_cursor_x][attack_cursor_y] = prev_state;
+                        after_state = state[attack_cursor_x][attack_cursor_y + 1];
+                        attack_cursor_y++;
+                        break;
+                    }
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    break;
+                case KEY_LEFT:
+                    // move the ship left
+                    if (!(attack_cursor_x - 1 < 0)) {
+                        state[attack_cursor_x][attack_cursor_y] = prev_state;
+                        after_state = state[attack_cursor_x - 1][attack_cursor_y];
+                        attack_cursor_x--;
+                        break;
+                    }
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    break;
+                case KEY_RIGHT:
+                    // move the ship right
+                    if (!(attack_cursor_x + 1 >= size_of_board)) {
+                        state[attack_cursor_x][attack_cursor_y] = prev_state;
+                        after_state = state[attack_cursor_x + 1][attack_cursor_y];
+                        attack_cursor_x++;
+                        break;
+                    }
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    break;
+                case '\n':  //'n' means enter key
+                    if (after_state == 1) {
+                        if (hit(attack_cursor_x, attack_cursor_y)) {
+                            state[attack_cursor_x][attack_cursor_y] = 5;
+                            after_state = 5;
+                        }
+                        else {
+                            state[attack_cursor_x][attack_cursor_y] = 4;
+                            after_state = 4;
+                            
+                        }
+                        attacked = true;
+                        break;
+                    }
+                    else if (after_state == 4) {
+                        state[attack_cursor_x][attack_cursor_y] = 4;
+                        break;
+                    }
+                    else if (after_state == 5) {
+                        state[attack_cursor_x][attack_cursor_y] = 5;
+                        break;
+                    }
+            
+        }
+    }
+
+}
+
 

@@ -172,7 +172,7 @@ void Player::setup() {
     clear();
     move(0, 0);
     // refresh();
-    printw("set up finished\n");
+    // printw("set up finished\n");
     refresh();
     return;
 }

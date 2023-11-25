@@ -9,7 +9,8 @@ public:
     Board(); // constructor
     void draw(WINDOW* win);
     void deallocate();
-
+    bool ship_empty();
+    const vector<vector<vector<int>>> get_ships() const;
     static constexpr int size_of_board = 19;
     static constexpr int no_of_ships = 6;
 
