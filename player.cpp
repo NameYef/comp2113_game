@@ -59,6 +59,18 @@ void Player::ship_set(char direction, int current_ship, int head_x, int head_y, 
 
 }
 
+// update the state of the board after an attack
+void Player::state_update(int& input_x, int& input_y, char& direction, bool& hit_ship) {
+     if (state[input_x][input_y] == 2) {
+        state[input_x][input_y] = -1; // assume -1 is the hit indicator
+        hit_ship = true;
+     }
+     if (state[input_x][input_y] == 0) {
+        state[input_x][input_y] = -2; // assume -2 is the reveal and hit indicator
+        hit_ship = false;
+     }
+}
+
 void Player::setup() {
 
     // create new window for set up
@@ -164,3 +176,4 @@ void Player::setup() {
     refresh();
     return;
 }
+
