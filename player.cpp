@@ -60,7 +60,7 @@ void Player::ship_set(char direction, int current_ship, int head_x, int head_y, 
 }
 
 // update the state of the board after an attack
-void Player::state_update(int& input_x, int& input_y, char& direction, bool& hit_ship) {
+void Player::state_update(int& input_x, int& input_y, bool& hit_ship) {
      if (state[input_x][input_y] == 2) {
         state[input_x][input_y] = -1; // assume -1 is the hit indicator
         hit_ship = true;
