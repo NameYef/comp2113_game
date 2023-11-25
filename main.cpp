@@ -30,17 +30,20 @@ void game_init(){
 int main(int argc, char ** argv) {
 
     game_init();
+    while (manager->gamestate != "quit") {
+
     Manager* manager = new Manager();
 
-    while (manager->game_state != "quit") {
+    while (manager->game_state != "menu") {
 
     manager->run();
     
     }
 
+    delete manager;
+    }
 
     
-    delete manager;
     
     
     

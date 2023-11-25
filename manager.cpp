@@ -60,9 +60,9 @@ void Manager::gameplay() {
 }
 
 void Manager::run() {
-    if (game_state == "menu") {
-        // menu stuff
-    }
+    // if (game_state == "menu") {
+    //     // menu stuff
+    // }
     else if (game_state == "pregame") {
         game_setup();
     }
