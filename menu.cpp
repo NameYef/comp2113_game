@@ -104,8 +104,16 @@ void menu(string &game_state){
         {
             content = newwin(14, 56, yMax/2-4, xMax/2-5);
             box(content, 0, 0);
-            mvwprintw(content, 6, 12, "ready to continue last game?");
-            mvwprintw(content, 7, 14, "press Enter to continue");
+            fstream test;
+            test.open("bot_state.txt");
+            if (test.fail()){
+                mvwprintw(content, 6, 12, "No record file");
+            }
+            else {
+                mvwprintw(content, 6, 12, "ready to continue last game?");
+                mvwprintw(content, 7, 14, "press Enter to continue");
+            }
+            test.close();
             wrefresh(content);
         }
         // for the instruction choice the instruction window pops out
@@ -193,6 +201,12 @@ void menu(string &game_state){
         }
         if(choice == 10 && highlight == 1){
             //continue game
+            fstream test;
+            test.open("bot_state.txt");
+            if (test.fail()){
+                continue;
+            }
+            test.close();
             game_state = "game";
             clear();
             return;
