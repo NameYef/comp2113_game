@@ -1,5 +1,6 @@
 #include "manager.h"
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -76,6 +77,10 @@ void Manager::gameplay() {
     WINDOW* player_board = newwin(41, 83, 0, xmax - 83);
     WINDOW* bot_status = newwin(10, 20, 44, 30);
     WINDOW* player_status = newwin(10, 20, 44, xmax - 53);
+
+    //start timer
+    clock_t start = clock();
+    
     while (! check_win()) {
         bot->draw(bot_board);
         player->draw(player_board);
@@ -95,6 +100,7 @@ void Manager::gameplay() {
         switch_player();
 
     }
+    clock_t end = clock();
 
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
