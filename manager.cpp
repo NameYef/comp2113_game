@@ -93,7 +93,19 @@ void Manager::gameplay() {
 
         if (previous_player == 'b') {
             // player's turn to attack
-            bot->player_attack(bot_board);
+            while (true){
+                if (bot->player_attack(bot_board)){
+                    //save the game
+                    endwin(); // end all windows
+                    exit(1); //quit game
+                }
+                else {
+                    bot->draw(bot_board);
+                    player->draw(player_board);
+                    this->draw_status(bot_status, 'b');
+                    this->draw_status(player_status, 'p');
+                }
+            }
         }
         else if (previous_player == 'p') {
             // bot's turn to attack

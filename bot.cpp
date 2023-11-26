@@ -135,7 +135,7 @@ bool Bot::hit(int cursor_x, int cursor_y) {
     return false;
 
 }
-void Bot::player_attack(WINDOW* win) {
+bool Bot::player_attack(WINDOW* win) {
     bool attacked = false;
     int input;
     while (! attacked) {
@@ -211,6 +211,14 @@ void Bot::player_attack(WINDOW* win) {
                     else if (after_state == 5) {
                         state[attack_cursor_x][attack_cursor_y] = 5;
                         break;
+                    }
+                case 27: // 27 means escape
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    if (this->confirmQuit()){
+                        return true;
+                    }
+                    else {
+                        return false;    
                     }
             
         }
