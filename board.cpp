@@ -255,7 +255,7 @@ void Board::store_state() {
 }
 
 //run when user continue
-void Board::update_state() {
+void Board::load_state() {
     ifstream inputFile("game_state.txt");
     if (inputFile.is_open()) {
         for (int i = 0; i < size_of_board; i++) {
