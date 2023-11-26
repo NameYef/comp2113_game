@@ -8,6 +8,14 @@
 #include <fstream>
 using namespace std;
 
+// Custom comparator function
+bool customComparator(const vector<int>& a, const vector<int>& b) {
+    if (a[0] == b[0]) {
+        return a[1] > b[1]; // Sort based on the second element if the first element is the same
+        }  
+    return a[0] > b[0]; // Sort based on the first element otherwise
+    }
+
 void menu(string &game_state){
     //get screen size
     int yMax, xMax;
@@ -120,26 +128,31 @@ void menu(string &game_state){
         // Leaderboard choice : trigger the function that shows score board
         if(highlight == 3)
         {
-            int n = 0;              // nth score in descending order
-            fstream op("score_and_time.txt");
+            vector<vector<int>> ScoreTimePairs; // 2D vector to store score-time pairs
+            
+            // Sort the vector array based on the first and second elements of each sub-vector
+            sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+
+            ifstream inputFile("ScoreTime.txt"); // Open the file for reading
+            if (inputFile.is_open()) {
+                int score, time;
+                while (inputFile >> score >> time) {
+                    ScoreTimePairs.push_back({score, time}); // Add each pair to the 2D vector
+                }
+                inputFile.close(); // Close the file
+            }
             //input data
             content = newwin(14, 56, yMax/2-4, xMax/2-5);
             box(content, 0, 0);
-            mvwprintw(content, 1,2, "rank");
-
-            /*// store the scores from file to vector with istream_iterator
-            vector<int> scores((istream_iterator<int>(op)), istream_iterator<int>());
-            sort(scores.begin(), scores.end(), greater<int>()); // sorts in descending order
-
-            // print top 10 scores from vec
-            for (const auto& e: scores){
-                if (n >= 9) break; // only output top 10 scores
-                mvwprintw(content, n+highlight, 3, "%d.", n+1);
-                mvwprintw(content, n+highlight, 6,"%d", e);
+            mvwprintw(content, 1,2, "rank:");
+            int n=1;
+            for (int i=0; i<ScoreTimePairs.size(); i++){
+                mvwprintw(content, i+2, 2, "%d.", n);
+                mvwprintw(content, i+2, 5, "%d", (ScoreTimePairs[i][0]));
+                mvwprintw(content, i+2, 9, "%d", (ScoreTimePairs[i][1]));
                 n++;
+            }
 
-            }*/
-            mvwprintw(content, 12, 2, "Press s to continue");
             wrefresh(content);
         }
         // exit choice : delete the menu windows and return to terminal
