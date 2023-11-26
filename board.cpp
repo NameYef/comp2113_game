@@ -90,44 +90,6 @@ void Board::draw(WINDOW* win) {
     wrefresh(win);
     refresh();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // //first line
     // cout << "   ";
     // for (int i=0; i<size_of_board; i++){
     //     cout << "+---";
@@ -201,3 +163,75 @@ void Board::draw(WINDOW* win) {
     // cout << endl;
 }
 
+bool Board::confirmQuit() {
+
+    keypad(stdscr, true);  // Enable keypad for arrow key input
+    noecho();  // Disable echoing of user input
+
+    clear();  // Clear the screen
+
+    // Get the dimensions of the terminal window
+    int maxRows, maxCols;
+    getmaxyx(stdscr, maxRows, maxCols);
+
+    // Center the message on the screen
+    const char* message = "Do you want to quit?";
+    int messageLength = strlen(message);
+    int row = maxRows / 2;
+    int col = (maxCols - messageLength) / 2;
+
+    // Display the message
+    mvprintw(row, col, message);
+
+    // Display the options
+    const char* optionYes = "[ Yes ]";
+    const char* optionNo = "[ No ]";
+    int optionWidth = strlen(optionYes);
+    int optionRow = row + 2;
+    int optionCol = (maxCols - optionWidth * 2) / 2;
+
+    attron(A_REVERSE);  // Highlight the first option
+    mvprintw(optionRow, optionCol, optionYes);
+    attroff(A_REVERSE);
+    mvprintw(optionRow, optionCol + optionWidth, optionNo);
+
+    refresh();  // Refresh the screen
+
+    int currentOption = 0;
+    int choice;
+
+    while ((choice = getch())) {
+        switch (choice) {
+            case KEY_LEFT:
+                if (currentOption == 1) {
+                    // Highlight the first option
+                    mvprintw(optionRow, optionCol, optionYes);
+                    attroff(A_REVERSE);
+                    mvprintw(optionRow, optionCol + optionWidth, optionNo);
+                    currentOption = 0;
+                }
+                break;
+            case KEY_RIGHT:
+                if (currentOption == 0) {
+                    // Highlight the second option
+                    mvprintw(optionRow, optionCol, optionYes);
+                    mvprintw(optionRow, optionCol + optionWidth, optionNo);
+                    attron(A_REVERSE);
+                    mvprintw(optionRow, optionCol + optionWidth, optionNo);
+                    currentOption = 1;
+                }
+                break;
+            case '\n':
+                // User confirmed selection, clean up and restore the terminal
+                endwin();
+
+                if (currentOption == 0) {
+                    // User selected "Yes"
+                    return true;
+                } else {
+                    // User selected "No"
+                    return false;
+                }
+        }
+    }
+}
