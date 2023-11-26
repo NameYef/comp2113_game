@@ -1,5 +1,6 @@
 #include "board.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -238,12 +239,20 @@ bool Board::confirmQuit() {
 }
 
 //run when user exit
-void Board::store_state() {
-    ofstream outputFile("game_state.txt");
+void Board::store_state(string fname) {
+    ofstream outputFile(fname.c_str());
     if (outputFile.is_open()) {
         for (int i = 0; i < size_of_board; i++) {
             for (int j = 0; j < size_of_board; j++) {
                 outputFile << state[i][j] << " ";
+            }
+            outputFile << endl;
+        }
+        for (const auto& outerVec : ships) {
+            for (const auto& innerVec : outerVec) {
+                for (const int& element : innerVec) {
+                    outputFile  << element << " ";
+                }
             }
             outputFile << endl;
         }
@@ -255,13 +264,28 @@ void Board::store_state() {
 }
 
 //run when user continue
-void Board::load_state() {
-    ifstream inputFile("game_state.txt");
+void Board::load_state(string fname) {
+    ifstream inputFile(fname.c_str());
     if (inputFile.is_open()) {
         for (int i = 0; i < size_of_board; i++) {
             for (int j = 0; j < size_of_board; j++) {
                 inputFile >> state[i][j];
             }
+        }
+        string s;
+        while(getline(inputFile,s)){
+            istringstream iss(s);
+            vector<vector<int>> coords_arr;
+            if (s != ""){
+                int i,j;
+                while (iss >> i >> j){
+                    vector<int> coords;
+                    coords.push_back(i);
+                    coords.push_back(j);
+                    coords_arr.push_back(coords);
+                }
+            }
+            ships.push_back(coords_arr);
         }
         inputFile.close();
         cout << "Game state loaded successfully." << endl;

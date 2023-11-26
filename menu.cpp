@@ -181,8 +181,9 @@ void menu(string &game_state){
         }
         if(choice == 10 && highlight == 1){
             //continue game
+            game_state = "game";
             clear();
-            break;
+            return;
         }
         if(choice == 10 && highlight == 4){
             //exit game

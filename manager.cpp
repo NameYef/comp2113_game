@@ -96,6 +96,8 @@ void Manager::gameplay() {
             while (true){
                 if (bot->player_attack(bot_board)){
                     //save the game
+                    bot->store_state("bot_state.txt");
+                    player->store_state("player_state.txt");
                     endwin(); // end all windows
                     exit(1); //quit game
                 }
@@ -133,6 +135,10 @@ void Manager::run() {
     if (game_state == "menu") {
         // menu stuff
         menu(game_state);
+        if (game_state == "game"){
+            bot->load_state("bot_state.txt");
+            player->load_state("player_state.txt");
+        }
     }
     else if (game_state == "pregame") {
         game_setup();
