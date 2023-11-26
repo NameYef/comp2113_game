@@ -42,43 +42,6 @@ void menu(){
             mvwprintw(menuwin, i+7, 10, choices[i].c_str());
             wattroff(menuwin, A_REVERSE);
         }
-        choice = wgetch(menuwin);
-
-        //selection
-        switch (choice) {
-            case KEY_UP:
-                highlight--;
-                //prevent out of bound
-                if (highlight == -1)
-                    highlight = 0;
-                break;
-            case KEY_DOWN:
-                highlight++;
-                //prevent out of bound
-                if (highlight == 5)
-                    highlight = 4;
-                break;
-            default:
-                break;
-        }
-        //10 is enter key
-        if(choice == 10 && highlight == 0)
-        {
-            //start game
-            clear();
-            break;
-        }
-        if(choice == 10 && highlight == 1){
-            //continue game
-            clear();
-            break;
-        }
-        if(choice == 10 && highlight == 4){
-            //exit game
-            endwin(); // end all windows
-            exit(1); //quit game
-            break;
-        }
 
         if(highlight == 0)
         {
@@ -147,6 +110,45 @@ void menu(){
             mvwprintw(content, 7, 16, "press Enter to exit");
             wrefresh(content);
         }
+
+        choice = wgetch(menuwin);
+
+        //selection
+        switch (choice) {
+            case KEY_UP:
+                highlight--;
+                //prevent out of bound
+                if (highlight == -1)
+                    highlight = 0;
+                break;
+            case KEY_DOWN:
+                highlight++;
+                //prevent out of bound
+                if (highlight == 5)
+                    highlight = 4;
+                break;
+            default:
+                break;
+        }
+        //10 is enter key
+        if(choice == 10 && highlight == 0)
+        {
+            //start game
+            clear();
+            break;
+        }
+        if(choice == 10 && highlight == 1){
+            //continue game
+            clear();
+            break;
+        }
+        if(choice == 10 && highlight == 4){
+            //exit game
+            endwin(); // end all windows
+            exit(1); //quit game
+            break;
+        }
+
 
     }
 /*    int row, col;
