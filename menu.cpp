@@ -181,6 +181,7 @@ void menu(){
     refresh();
     this_thread::sleep_for(chrono::nanoseconds(10));
     this_thread::sleep_until(chrono::system_clock::now() + chrono::seconds(1));
+    clear();
     //keep window show to see
     //getch();
 

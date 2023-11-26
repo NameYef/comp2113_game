@@ -76,7 +76,7 @@ void Board::draw(WINDOW* win) {
                     column += 4;
                     break;
                 case 5:
-                    mvwprintw(win, game_row, column, "█X█");
+                    mvwprintw(win, game_row, column, "█X█|");
                     column += 4;
                     break;
             }
@@ -230,6 +230,7 @@ bool Board::confirmQuit() {
                     return true;
                 } else {
                     // User selected "No"
+                    clear();
                     return false;
                 }
         }
