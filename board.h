@@ -2,6 +2,7 @@
 #define BOARDV_H
 #include <vector>
 #include <ncurses.h>
+#include <fstream>
 using namespace std;
 
 class Board {
@@ -13,6 +14,8 @@ public:
     const vector<vector<vector<int>>> get_ships() const;
     static constexpr int size_of_board = 19;
     static constexpr int no_of_ships = 6;
+    void store_state();
+    void load_state();
 
 protected:
 // variables

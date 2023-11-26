@@ -236,3 +236,38 @@ bool Board::confirmQuit() {
         }
     }
 }
+
+//run when user exit
+void Board::store_state() {
+    ofstream outputFile("game_state.txt");
+    if (outputFile.is_open()) {
+        for (int i = 0; i < size_of_board; i++) {
+            for (int j = 0; j < size_of_board; j++) {
+                outputFile << state[i][j] << " ";
+            }
+            outputFile << endl;
+        }
+        outputFile.close();
+        cout << "Game state saved successfully." << endl;
+    } else {
+        cerr << "Failed to open the output file." << endl;
+    }
+}
+
+//run when user continue
+void Board::update_state() {
+    ifstream inputFile("game_state.txt");
+    if (inputFile.is_open()) {
+        for (int i = 0; i < size_of_board; i++) {
+            for (int j = 0; j < size_of_board; j++) {
+                inputFile >> state[i][j];
+            }
+        }
+        inputFile.close();
+        cout << "Game state loaded successfully." << endl;
+
+        // ... code to resume the game ...
+    } else {
+        cerr << "Failed to open the input file." << endl;
+    }
+}
