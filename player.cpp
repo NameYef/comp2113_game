@@ -71,7 +71,7 @@ void Player::state_update(int& input_x, int& input_y, bool& hit_ship) {
      }
 }
 
-void Player::setup() {
+bool Player::setup() {
 
     // create new window for set up
     WINDOW* win = newwin(41, 83, 0, 0);
@@ -157,6 +157,9 @@ void Player::setup() {
                         // mvprintw(25, 100, "Invalid move! Choose another position.");
                         break;
                     }
+                case 27: // 27 means escape
+                    if (this->confirmQuit())
+                        return true;                
             }
         }
         // move on to the next ship
@@ -174,6 +177,6 @@ void Player::setup() {
     // refresh();
     // printw("set up finished\n");
     refresh();
-    return;
+    return false;
 }
 

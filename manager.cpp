@@ -21,7 +21,11 @@ Manager::~Manager() {
 
 void Manager::game_setup() {
     bot->setup();
-    player->setup();
+    if (player->setup()){
+        //save the game
+        endwin(); // end all windows
+        exit(1); //quit game
+    }
 
     game_state = "game";
     return;
