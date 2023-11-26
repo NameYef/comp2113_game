@@ -19,6 +19,7 @@ protected:
     // instance variables 
     vector<vector<vector<int>>> ships;
     int state[size_of_board][size_of_board];
+    bool confirmQuit();
 };
 
 
