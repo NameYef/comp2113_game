@@ -16,6 +16,8 @@ public:
     static constexpr int no_of_ships = 6;
     void store_state(string fname);
     void load_state(string fname);
+    double accuracy();
+    void store_accuracy();
 
 protected:
 // variables

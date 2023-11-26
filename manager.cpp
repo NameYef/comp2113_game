@@ -148,3 +148,23 @@ void Manager::run() {
     }
     return;
 }
+
+
+void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
+    ofstream outputFile("ScoreTime.txt"); // Open the file for writing
+
+    if (outputFile.is_open()) {
+        for (const auto& pair : ScoreTimePairs) {
+            for (const int& value : pair) {
+                outputFile << value << " "; // Write each value separated by a space
+            }
+            outputFile << endl; // Write a new line after each pair
+        }
+
+        outputFile.close(); // Close the file
+/*        cout << "Data written to file successfully." << endl;
+    } else {
+        cout << "Error opening the file." << endl;
+    }*/
+    }
+}

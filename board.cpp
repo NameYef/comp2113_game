@@ -295,3 +295,34 @@ void Board::load_state(string fname) {
         cerr << "Failed to open the input file." << endl;
     }
 }
+
+//get accuracy
+double Board::accuracy(){
+    double missed_attack_num = 0.0, hitted_attack_num = 0.0;
+    for (int i = 0; i < size_of_board; i++) {
+            for (int j = 0; j < size_of_board; j++) {
+                if (state[i][j] == 4)
+                    missed_attack_num++;
+                if (state[i][j] == 5)
+                    hitted_attack_num++;
+            }
+    }
+    return hitted_attack_num/(missed_attack_num+hitted_attack_num);
+}
+
+//run when user win
+void Board::store_accuracy() {
+    ofstream outputFile("game_state.txt");
+    if (outputFile.is_open()) {
+        for (int i = 0; i < size_of_board; i++) {
+            for (int j = 0; j < size_of_board; j++) {
+                outputFile << state[i][j] << " ";
+            }
+            outputFile << endl;
+        }
+        outputFile.close();
+        cout << "Game state saved successfully." << endl;
+    } else {
+        cerr << "Failed to open the output file." << endl;
+    }
+}

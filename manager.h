@@ -20,6 +20,7 @@ public:
     void run(); // wrap the whole thing together to run in main
     string game_state; // to know what phase of the game is
     void confirmQuit();
+    void update_score_time(vector<vector<int>>);
 
 private:
     // creating player and bot pointer
