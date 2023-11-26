@@ -272,7 +272,9 @@ void Board::load_state(string fname) {
                 inputFile >> state[i][j];
             }
         }
+        ships.clear();
         string s;
+        getline(inputFile,s);
         while(getline(inputFile,s)){
             istringstream iss(s);
             vector<vector<int>> coords_arr;
