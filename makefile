@@ -12,11 +12,17 @@ player.o: player.cpp player.h
 manager.o: manager.cpp manager.h
 	g++ $(FLAGS) -c $<
 
-main: board.o bot.o player.o manager.o main.cpp
-	g++ $(FLAGS) $^ -o $@ -lncursesw
+start_title.o: start_title.cpp start_title.h
+	g++ $(FLAGS) -c $<
+
+menu.o: menu.cpp menu.h
+	g++ $(FLAGS) -c $<
+
+main: board.o bot.o player.o manager.o start_title.o menu.o main.cpp
+	g++ $(FLAGS) $^ -o $@ -lncurses
 
 clean:
-	rm -f main manager.o player.o bot.o board.o 
+	rm -f main manager.o player.o bot.o board.o menu.o start_title.o
 
 .PHONY: clean
 
