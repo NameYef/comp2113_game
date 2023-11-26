@@ -129,9 +129,6 @@ void menu(string &game_state){
         if(highlight == 3)
         {
             vector<vector<int>> ScoreTimePairs; // 2D vector to store score-time pairs
-            
-            // Sort the vector array based on the first and second elements of each sub-vector
-            sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
 
             ifstream inputFile("ScoreTime.txt"); // Open the file for reading
             if (inputFile.is_open()) {
@@ -141,6 +138,8 @@ void menu(string &game_state){
                 }
                 inputFile.close(); // Close the file
             }
+            // Sort the vector array based on the first and second elements of each sub-vector
+            sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
             //input data
             content = newwin(14, 56, yMax/2-4, xMax/2-5);
             box(content, 0, 0);
