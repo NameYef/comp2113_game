@@ -1,4 +1,5 @@
 #include "manager.h"
+#include "start_title.h"
 #include <ncurses.h>
 #include <iostream>
 // #include "board.h"
@@ -24,6 +25,7 @@ void game_init(){
   noecho();               // Don't echo any keypresses
   curs_set(FALSE);        // Don't display a cursor
   // nodelay(stdscr, true);  //allow to animate screen while waiting input
+  start_title();
 }
 
 
