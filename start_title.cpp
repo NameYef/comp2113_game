@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "start_title.h"
+#include "menu.h"
 using namespace std;
 
 void start_title() {
