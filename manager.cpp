@@ -8,7 +8,7 @@ using namespace std;
 Manager::Manager() {
     player = new Player();
     bot = new Bot();
-    game_state = "pregame";
+    game_state = "menu";
     previous_player = 'b';
     getmaxyx(stdscr, ymax, xmax);
 }
@@ -105,7 +105,7 @@ void Manager::gameplay() {
 
     }
     clock_t end = clock();
-
+    game_state = "menu";
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
 
@@ -120,6 +120,7 @@ void Manager::gameplay() {
 void Manager::run() {
     if (game_state == "menu") {
         // menu stuff
+        menu(game_state);
     }
     else if (game_state == "pregame") {
         game_setup();

@@ -4,6 +4,7 @@
 #include "player.h"
 #include <iostream>
 #include <ncurses.h>
+#include "menu.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ private:
     int xmax;
 };
 
-
+void menu(string &game_state);
 
 
 #endif
