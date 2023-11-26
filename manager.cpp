@@ -76,6 +76,11 @@ void Manager::gameplay() {
     WINDOW* player_board = newwin(41, 83, 0, xmax - 83);
     WINDOW* bot_status = newwin(10, 20, 44, 30);
     WINDOW* player_status = newwin(10, 20, 44, xmax - 53);
+    int bot_attempts=0;
+    int coordinate_x=0;
+    int coordinate_y=0;
+    int original_x=0;
+    int original_y=0;
     while (! check_win()) {
         bot->draw(bot_board);
         player->draw(player_board);
@@ -87,6 +92,7 @@ void Manager::gameplay() {
             bot->player_attack(bot_board);
         }
         else if (previous_player == 'p') {
+	    player->bot_attack(bot_attempts, coordinate_x, coordinate_y, original_x, original_y);
             // bot's turn to attack
             // placeholder below
             getch();
