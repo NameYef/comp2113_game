@@ -64,7 +64,7 @@ void menu(string &game_state){
 
     //create a winder for game (y,x,beginY,beginX)
     //WINDOW * menuwin = newwin(yMax-30, xMax-20, yMax-35, 10);
-    WINDOW * menuwin = newwin(18, 30, yMax/2-5, xMax/2-40);
+    WINDOW * menuwin = newwin(18, 30, yMax/2, xMax/2-40);
 
     WINDOW * content;
 
@@ -92,18 +92,16 @@ void menu(string &game_state){
             wattroff(menuwin, A_REVERSE);
         }
 
+        content = newwin(14, 56, yMax/2+1, xMax/2-5);
+        box(content, 0, 0);
         if(highlight == 0)
         {
-            content = newwin(14, 56, yMax/2-4, xMax/2-5);
-            box(content, 0, 0);
             mvwprintw(content, 6, 13, "ready to start new game?");
             mvwprintw(content, 7, 15, "press Enter to start");
             wrefresh(content);
         }
         if(highlight == 1)
         {
-            content = newwin(14, 56, yMax/2-4, xMax/2-5);
-            box(content, 0, 0);
             fstream test;
             test.open("bot_state.txt");
             if (test.fail()){
@@ -119,8 +117,6 @@ void menu(string &game_state){
         // for the instruction choice the instruction window pops out
         if(highlight == 2)
         {
-            content = newwin(14, 56, yMax/2-4, xMax/2-5);
-            box(content, 0, 0);
             mvwprintw(content, 2, 2, "Controls :");
             mvwprintw(content, 3, 2, "Move -> arrow keys");
             mvwprintw(content, 4, 2, "Quit game -> dunno yet");
@@ -149,8 +145,6 @@ void menu(string &game_state){
             // Sort the vector array based on the first and second elements of each sub-vector
             sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
             //input data
-            content = newwin(14, 56, yMax/2-4, xMax/2-5);
-            box(content, 0, 0);
             mvwprintw(content, 1,2, "rank:");
             int n=1;
             for (int i=0; i<ScoreTimePairs.size(); i++){
@@ -165,8 +159,6 @@ void menu(string &game_state){
         // exit choice : delete the menu windows and return to terminal
         if(highlight == 4)
         {
-            content = newwin(14, 56, yMax/2-4, xMax/2-5);
-            box(content, 0, 0);
             mvwprintw(content, 6, 16, "Are you sure to exit?");
             mvwprintw(content, 7, 16, "press Enter to exit");
             wrefresh(content);
