@@ -8,8 +8,8 @@ Manager::Manager() {
     player = new Player();
     bot = new Bot();
     game_state = "pregame";
-    previous_player = 'b';
-    getmaxyx(stdscr, ymax, xmax);
+    previous_player = "bot";
+    getmaxyx(stdscr, ymax, xmax); 
 }
 
 // Destructor
@@ -27,7 +27,7 @@ void Manager::game_setup() {
 }
 
 void Manager::switch_player() {
-    previous_player = (previous_player == 'p') ? 'b' : 'p';
+    previous_player = (previous_player == "player") ? "bot" : "player";
 }
 
 bool Manager::check_win() {
@@ -36,12 +36,15 @@ bool Manager::check_win() {
     return (player->ship_empty() || bot->ship_empty());
 }
 
-void Manager::draw_status(WINDOW* win, char user) {
-    if (user == 'p') {
+void Manager::draw_status(WINDOW* win, string user) {
+    if (user == "player") {
         vector<vector<vector<int>>> ships = player->get_ships();
         refresh();
+        werase(win);
+        wrefresh(win);
         box(win, 0, 0);
         wrefresh(win);
+
         mvwprintw(win, 0, 1, "Player");
         mvwprintw(win, 1, 1, "Tiny: %lu / %d", ships[0].size(), 3);
         mvwprintw(win, 2, 1, "Small: %lu / %d", ships[1].size(), 4);
@@ -52,9 +55,11 @@ void Manager::draw_status(WINDOW* win, char user) {
         wrefresh(win);
         refresh();
     }
-    else if (user == 'b') {
+    else if (user == "bot") {
         vector<vector<vector<int>>> ships = bot->get_ships();
         refresh();
+        werase(win);
+        wrefresh(win);
         box(win, 0, 0);
         wrefresh(win);
         mvwprintw(win, 0, 1, "Bot");
@@ -69,47 +74,68 @@ void Manager::draw_status(WINDOW* win, char user) {
     }
 }
 
+
+
 void Manager::gameplay() {
 // implement turn based fundamental gameplay here
     // if no one wins then continue this loop
     WINDOW* bot_board = newwin(41, 83, 0, 0);
-    WINDOW* player_board = newwin(41, 83, 0, xmax - 83);
+    WINDOW* player_board = newwin(41, 83, 0, 119);
     WINDOW* bot_status = newwin(10, 20, 44, 30);
-    WINDOW* player_status = newwin(10, 20, 44, xmax - 53);
-    int bot_attempts=0;
-    int coordinate_x=0;
-    int coordinate_y=0;
-    int original_x=0;
-    int original_y=0;
-    while (! check_win()) {
+    WINDOW* player_status = newwin(10, 20, 44, 202 - 53);
+    WINDOW* announcer = newwin(10, 202 - 170, 20, 85);
+    
+    while (1) {
         bot->draw(bot_board);
         player->draw(player_board);
-        this->draw_status(bot_status, 'b');
-        this->draw_status(player_status, 'p');
+        this->draw_status(bot_status, "bot");
+        this->draw_status(player_status, "player");
 
-        if (previous_player == 'b') {
+
+        
+        if (previous_player == "bot") {
             // player's turn to attack
+            werase(announcer);
+            box(announcer, 0, 0);
+            mvwprintw(announcer, 6, 5, "Player  %d vs %d   Bot", player->ship_left(), bot->ship_left());
+            mvwprintw(announcer, 2, 9, "Player's Turn!");
+            mvwprintw(announcer, 3, 7,"Arrow key to move");
+            mvwprintw(announcer,4, 8, "ENTER to attack");
+            refresh();
+            wrefresh(announcer);
             bot->player_attack(bot_board);
         }
-        else if (previous_player == 'p') {
-	    player->bot_attack(bot_attempts, coordinate_x, coordinate_y, original_x, original_y);
+        else if (previous_player == "player") {
             // bot's turn to attack
-            // placeholder below
+            werase(announcer);
+            box(announcer, 0, 0);
+            mvwprintw(announcer, 6, 5, "Player  %d vs %d   Bot", player->ship_left(), bot->ship_left());
+            mvwprintw(announcer, 2, 5, "Press any key to see");
+            mvwprintw(announcer, 3, 9, "bot's attack");
+            wrefresh(announcer);
+	        player->bot_attack();
             getch();
         }
 
+
         switch_player();
+
+        if (check_win()) {
+
+            break;
+        }
 
     }
 
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
 
-
-
+    werase(announcer);
+    mvwprintw(announcer, 2, 4, "%s won!", previous_player);
+    wrefresh(announcer);
 
     getch();
-
+    game_state = "quit";
     return;
 }
 

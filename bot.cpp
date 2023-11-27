@@ -85,7 +85,7 @@ void Bot::setup() {
 
     while (current_ship < no_of_ships) {
         uniform_int_distribution<> dir(0,1);
-        uniform_int_distribution<> intd(0, size_of_board);
+        uniform_int_distribution<> intd(0, size_of_board - 1);
         direction = directions[dir(gen)];
         no_of_blocks = ships[current_ship].capacity();
 
@@ -104,20 +104,20 @@ void Bot::setup() {
 
     }
 
+    WINDOW* win = newwin(41, 83, 0, 0);
+    refresh();
+    this->draw(win);
+    getch();
+    werase(win);
+    wrefresh(win);
+    delwin(win);
+    clear();
+    move(0, 0);
     for (int i=0; i< size_of_board; i++){
         for (int j=0; j< size_of_board; j++){
             state[i][j] = 1;
         }
     }
-    // WINDOW* win = newwin(41, 83, 0, 0);
-    // refresh();
-    // this->draw(win);
-    // getch();
-    // werase(win);
-    // wrefresh(win);
-    // delwin(win);
-    // clear();
-    // move(0, 0);
     return;
 
 }
@@ -144,9 +144,9 @@ void Bot::player_attack(WINDOW* win) {
         state[attack_cursor_x][attack_cursor_y] = 3;
 
         this->draw(win);
+        input = getch();
         // mvprintw(47,40,"after %d", after_state);
         // mvprintw(49,40,"prev %d", prev_state);
-        input = getch();
         refresh();
 
         switch (input) {
@@ -212,9 +212,13 @@ void Bot::player_attack(WINDOW* win) {
                         state[attack_cursor_x][attack_cursor_y] = 5;
                         break;
                     }
-            
+                default:
+                    state[attack_cursor_x][attack_cursor_y] = prev_state;
+                    break;
         }
+        
     }
+
 
 }
 

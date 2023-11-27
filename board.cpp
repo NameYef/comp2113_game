@@ -38,6 +38,20 @@ const vector<vector<vector<int>>> Board::get_ships() const {
     return ships;
 }
 
+
+int Board::ship_left() {
+    int count = 0;
+    for (auto i : ships) {
+        if (i.empty()) {
+            count++;
+        }
+    }
+    return (no_of_ships - count);
+}
+
+
+
+
 void Board::draw(WINDOW* win) {
     refresh();
     box(win, 0, 0);

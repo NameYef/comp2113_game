@@ -79,26 +79,13 @@ void Player::ship_set(char direction, int current_ship, int head_x, int head_y, 
 
 }
 
-// update the state of the board after an attack
-void Player::state_update(int& input_x, int& input_y, bool& hit_ship) {
-     if (state[input_x][input_y] == 2) {
-        state[input_x][input_y] = -1; // assume -1 is the hit indicator
-        hit_ship = true;
-     }
-     if (state[input_x][input_y] == 0) {
-        state[input_x][input_y] = -2; // assume -2 is the reveal and hit indicator
-        hit_ship = false;
-     }
-}
 
-
-
-void Player::bot_attack(int& bot_attempts, int& coordinate_x, int& coordinate_y, int& original_x, int& original_y){
+void Player::bot_attack(){
 	random_device rd;
 	mt19937 gen(rd());
 	if(bot_attempts==0)
 	{
-		uniform_int_distribution<> intd(0,18);
+		uniform_int_distribution<> intd(0,size_of_board - 1);
 		int check_x=intd(gen);
 		int check_y=intd(gen);
 		while(bot_overlap(check_x, check_y)){
@@ -143,7 +130,7 @@ void Player::bot_attack(int& bot_attempts, int& coordinate_x, int& coordinate_y,
 		}
 	}
 	else if(bot_attempts==2){
-		if((coordinate_y+1<=18)&&(state[coordinate_x][coordinate_y+1]==2)){
+		if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
 			state[coordinate_x][coordinate_y+1]=5;
 			bot_attempts=-2;
 			hit(coordinate_x,coordinate_y+1);
@@ -155,7 +142,7 @@ void Player::bot_attack(int& bot_attempts, int& coordinate_x, int& coordinate_y,
 		}
 	}
 	else if (bot_attempts==1){
-		if((coordinate_x+1<=18)&&(state[coordinate_x+1][coordinate_y]==2)){
+		if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]==2)){
 			state[coordinate_x+1][coordinate_y]=5;
 			bot_attempts=-1;
 			hit(coordinate_x+1,coordinate_y);
@@ -185,13 +172,13 @@ void Player::bot_attack(int& bot_attempts, int& coordinate_x, int& coordinate_y,
 	else if(bot_attempts==-3){
                 if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]==2)){
                         state[coordinate_x-1][coordinate_y]=5;
-			hit(coordinate_x-1,coordinate_y);
+			            hit(coordinate_x-1,coordinate_y);
                         coordinate_x=coordinate_x-1;
                 }
                 else if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]!=2)){
                         bot_attempts=2;
                         state[coordinate_x-1][coordinate_y]=4;
-			coordinate_x=original_x;
+			            coordinate_x=original_x;
                         coordinate_y=original_y;
                 }
                 else if(coordinate_x-1<0){
@@ -199,32 +186,32 @@ void Player::bot_attack(int& bot_attempts, int& coordinate_x, int& coordinate_y,
                 }
         }
 	else if(bot_attempts==-2){
-                if((coordinate_y+1<=18)&&(state[coordinate_x][coordinate_y+1]==2)){
+                if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
                         state[coordinate_x][coordinate_y+1]=5;
-			hit(coordinate_x,coordinate_y+1);
+			            hit(coordinate_x,coordinate_y+1);
                         coordinate_y=coordinate_y+1;
                 }
-                else if((coordinate_y+1<=18)&&(state[coordinate_x][coordinate_y+1]!=2)){
+                else if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]!=2)){
                         bot_attempts=1;
                         state[coordinate_x][coordinate_y+1]=4;
-			coordinate_x=original_x;
+			            coordinate_x=original_x;
                         coordinate_y=original_y;
                 }
-                else if(coordinate_y+1>18){
+                else if(coordinate_y+1>size_of_board - 1){
                         bot_attempts=1;
                 }
         }
         else if(bot_attempts==-1){
-                if((coordinate_x+1<=18)&&(state[coordinate_x+1][coordinate_y]==2)){
+                if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]==2)){
                         state[coordinate_x+1][coordinate_y]=5;
 			hit(coordinate_x+1,coordinate_y);
                         coordinate_x=coordinate_x+1;
                 }
-                else if((coordinate_x+1<=18)&&(state[coordinate_x+1][coordinate_y]!=2)){
+                else if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]!=2)){
                         bot_attempts=0;
                         state[coordinate_x+1][coordinate_y]=4;
                 }
-                else if(coordinate_x+1>18){
+                else if(coordinate_x+1>size_of_board - 1){
                         bot_attempts=0;
                 }
         }
@@ -292,7 +279,7 @@ void Player::setup() {
                     break;
                 case KEY_RIGHT:
                     // move the ship right
-                    if (!(head_x + 1 >= size_of_board)) {
+                    if (!((head_x + no_of_blocks >= size_of_board && direction == 'h') || (head_x + 1 >= size_of_board && direction == 'v'))) {
                     this->state_set(direction, head_x, head_y, no_of_blocks, 1);
                     head_x++;
                     }
