@@ -7,7 +7,7 @@ class Player : public Board {
 
 public:
     // methods for set up
-    void setup();
+    bool setup(); // returns true if confirmed quit
     
     // method for gameplay
     void bot_attack();

@@ -1,5 +1,10 @@
 #include "manager.h"
 #include <iostream>
+#include <chrono>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -7,9 +12,9 @@ using namespace std;
 Manager::Manager() {
     player = new Player();
     bot = new Bot();
-    game_state = "pregame";
-    previous_player = "bot";
-    getmaxyx(stdscr, ymax, xmax); 
+    game_state = "menu";
+    previous_player = 'b';
+    getmaxyx(stdscr, ymax, xmax);
 }
 
 // Destructor
@@ -20,7 +25,10 @@ Manager::~Manager() {
 
 void Manager::game_setup() {
     bot->setup();
-    player->setup();
+    if (player->setup()){
+        //save the game
+        game_state = "quit";
+    }
 
     game_state = "game";
     return;
@@ -85,7 +93,11 @@ void Manager::gameplay() {
     WINDOW* player_status = newwin(10, 20, 44, 202 - 53);
     WINDOW* announcer = newwin(10, 202 - 170, 20, 85);
     
+    auto start = chrono::high_resolution_clock::now();
+    
     while (1) {
+        //start timer
+
         bot->draw(bot_board);
         player->draw(player_board);
         this->draw_status(bot_status, "bot");
@@ -107,6 +119,37 @@ void Manager::gameplay() {
             refresh();
             wrefresh(announcer);
             bot->player_attack(bot_board);
+
+            while (true){
+                if (bot->player_attack(bot_board)){
+                    //save the game
+                    bot->store_state("bot_state.txt");
+                    player->store_state("player_state.txt");
+
+                    // stop the clock
+                    auto end = chrono::high_resolution_clock::now();
+
+                    // calculate the elapsed time
+                    chrono::duration<double> elapsed = end - start;
+                    duration += elapsed.count();
+                    
+                    // store the duration
+                    ofstream fout;
+                    fout.open("duration.txt");
+                    fout << duration;
+                    fout.close();
+
+                    endwin();
+                    game_state = "quit";
+                    return;
+                }
+                else {
+                    bot->draw(bot_board);
+                    player->draw(player_board);
+                    this->draw_status(bot_status, "bot");
+                    this->draw_status(player_status, "player");
+                }
+            }
         }
         else if (previous_player == "player") {
             // bot's turn to attack
@@ -125,7 +168,15 @@ void Manager::gameplay() {
 
 
     }
+    // stop the clock
+    auto end = chrono::high_resolution_clock::now();
 
+    // calculate the elapsed time
+    chrono::duration<double> elapsed = end - start;
+    duration += elapsed.count();
+
+
+    game_state = "menu";
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
 
@@ -134,6 +185,10 @@ void Manager::gameplay() {
     (previous_player == "player") ? mvwprintw(announcer, 2, 9, "Player won!") : mvwprintw(announcer, 2, 12, "Bot won!");
     mvwprintw(announcer, 4, 6, "Press any key to quit");
     wrefresh(announcer);
+
+    string name;
+    name = enter_name();
+    update_score_time(duration, name);
 
     getch();
     clear();
@@ -149,6 +204,24 @@ void Manager::gameplay() {
 void Manager::run() {
     if (game_state == "menu") {
         // menu stuff
+        menu(game_state);
+
+        if (game_state == "game"){
+            //continue
+
+            bot->load_state("bot_state.txt");
+            player->load_state("player_state.txt");
+            
+            //load duration
+            ifstream fin;
+            fin.open("duration.txt");
+            fin >> duration;
+            fin.close();
+        }
+        else {
+            // new gae
+            duration = 0;
+        }
     }
     else if (game_state == "pregame") {
         game_setup();
@@ -157,4 +230,106 @@ void Manager::run() {
         gameplay();
     }
     return;
+}
+
+
+/*
+void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
+    ofstream outputFile("ScoreTime.txt"); // Open the file for writing
+
+    if (outputFile.is_open()) {
+        for (const auto& pair : ScoreTimePairs) {
+            for (const int& value : pair) {
+                outputFile << value << " "; // Write each value separated by a space
+            }
+            outputFile << endl; // Write a new line after each pair
+        }
+
+        outputFile.close(); // Close the file
+           cout << "Data written to file successfully." << endl;
+    } else {
+        cout << "Error opening the file." << endl;
+    }
+    }
+}
+*/
+
+string Manager::enter_name(){
+
+    // keypad(stdscr, true);  // Enable keypad for arrow key input
+    // echo();  // Allow echoing of user input
+
+    clear();  // Clear the screen
+
+    // Get the dimensions of the terminal window
+    int maxRows, maxCols;
+    getmaxyx(stdscr, maxRows, maxCols);
+
+    // Center the message on the screen
+    const char* message = "Congrats. You win. Please enter your name:";
+    int messageLength = strlen(message);
+    int row = maxRows / 2;
+    int col = (maxCols - messageLength) / 2;
+
+    // Display the message
+    mvprintw(row, col, message);
+    mvprintw(row+1, col, "My name is ");
+    char str[100];
+    getstr(str);
+
+    refresh();  // Refresh the screen
+
+    string name(str);
+    noecho();  // Disable echoing of user input
+    return name;
+}
+//run when user win
+void Manager::update_score_time(double duration, string name) {
+
+    vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs+name
+
+    ifstream inputFile("ScoreTime.txt"); // Open the file for reading
+    if (inputFile.is_open()) {
+        string score, time, name;
+        string line;
+        while (getline(inputFile, line)) {
+            istringstream iss(line);
+            if (iss >> score >> time >> name) {
+            ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
+            }
+        inputFile.close(); // Close the file
+        }
+    }
+
+    //add new score and time to the rank
+    vector<string> new_ScoreTime;
+    double score = player->score() - bot->score();
+    new_ScoreTime.push_back(to_string(score));
+    new_ScoreTime.push_back(to_string(duration));
+    //add name also
+    new_ScoreTime.push_back(name);
+    // Sort the vector array based on the first and second elements of each sub-vector
+    sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+    if (ScoreTimePairs.size() < 10)
+        ScoreTimePairs.push_back(new_ScoreTime);
+    else if (stod(new_ScoreTime[0]) > stod(ScoreTimePairs[ScoreTimePairs.size()-1][0])){
+                ScoreTimePairs.pop_back();
+                ScoreTimePairs.push_back(new_ScoreTime);
+            }
+    
+    
+    // Sort the vector array based on the first and second elements of each sub-vector
+    sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+
+
+
+    ofstream outputFile("ScoreTime.txt"); // Open the file for writing
+    if (outputFile.is_open()) {
+        for (const auto& pair : ScoreTimePairs) {
+            for (const auto& value : pair) {
+                outputFile << value << " "; // Write each value separated by a space
+            }
+            outputFile << endl; // Write a new line after each pair
+        }
+    }
 }

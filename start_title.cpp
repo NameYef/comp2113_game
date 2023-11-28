@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "start_title.h"
+//#include "menu.h"
 using namespace std;
 
 void start_title() {
@@ -52,5 +53,5 @@ void start_title() {
     move(yMax - 10, 0);        // Move the cursor to the beginning of the line
     clrtoeol();       // Clear the entire line
     refresh();
-    menu();
+    //menu();
 }
