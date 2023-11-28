@@ -9,11 +9,11 @@
 using namespace std;
 
 // Custom comparator function
-bool customComparator(const vector<int>& a, const vector<int>& b) {
-    if (a[0] == b[0]) {
-        return a[1] > b[1]; // Sort based on the second element if the first element is the same
+bool customComparator(const vector<string>& a, const vector<string>& b) {
+    if (stod(a[0]) == stod(b[0])) {
+        return stod(a[1]) > stod(b[1]); // Sort based on the second element if the first element is the same
         }  
-    return a[0] > b[0]; // Sort based on the first element otherwise
+    return stod(a[0]) > stod(b[0]); // Sort based on the first element otherwise
     }
 
 void menu(string &game_state){
@@ -132,11 +132,11 @@ void menu(string &game_state){
         // Leaderboard choice : trigger the function that shows score board
         if(highlight == 3)
         {
-            vector<vector<int>> ScoreTimePairs; // 2D vector to store score-time pairs
+            vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs
 
             ifstream inputFile("ScoreTime.txt"); // Open the file for reading
             if (inputFile.is_open()) {
-                int score, time;
+                string score, time;
                 while (inputFile >> score >> time) {
                     ScoreTimePairs.push_back({score, time}); // Add each pair to the 2D vector
                 }
@@ -149,8 +149,8 @@ void menu(string &game_state){
             int n=1;
             for (int i=0; i<ScoreTimePairs.size(); i++){
                 mvwprintw(content, i+2, 2, "%d.", n);
-                mvwprintw(content, i+2, 5, "%d", (ScoreTimePairs[i][0]));
-                mvwprintw(content, i+2, 9, "%d", (ScoreTimePairs[i][1]));
+                mvwprintw(content, i+2, 5, "%s", (ScoreTimePairs[i][0]));
+                mvwprintw(content, i+2, 9, "%dmin %ds", (stoi(ScoreTimePairs[i][1])/60), (stoi(ScoreTimePairs[i][1])%60));
                 n++;
             }
 

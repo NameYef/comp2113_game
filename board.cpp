@@ -312,6 +312,7 @@ double Board::accuracy(){
     return hitted_attack_num/(missed_attack_num+hitted_attack_num);
 }
 
+/* moved to manager
 //run when user win
 void Board::store_accuracy() {
     ofstream outputFile("game_state.txt");
@@ -327,4 +328,14 @@ void Board::store_accuracy() {
     } else {
         cerr << "Failed to open the output file." << endl;
     }
+}
+*/
+double Board::score(){
+    int count = 27;
+    for (const auto& outerVec : ships) {
+            for (const auto& innerVec : outerVec) {
+                count--;
+            }
+    }
+    return count*accuracy();
 }

@@ -1,6 +1,7 @@
 #include "manager.h"
 #include <iostream>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -150,6 +151,7 @@ void Manager::run() {
 }
 
 
+/*
 void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
     ofstream outputFile("ScoreTime.txt"); // Open the file for writing
 
@@ -162,9 +164,55 @@ void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
         }
 
         outputFile.close(); // Close the file
-/*        cout << "Data written to file successfully." << endl;
+           cout << "Data written to file successfully." << endl;
     } else {
         cout << "Error opening the file." << endl;
-    }*/
+    }
+    }
+}
+*/
+
+//run when user win
+void Manager::update_score_time(double duration) {
+
+    vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs
+
+    ifstream inputFile("ScoreTime.txt"); // Open the file for reading
+    if (inputFile.is_open()) {
+        string score, time;
+        while (inputFile >> score >> time) {
+            ScoreTimePairs.push_back({score, time}); // Add each pair to the 2D vector
+        }
+        inputFile.close(); // Close the file
+    }
+
+    //add new score and time to the rank
+    vector<string> new_ScoreTime;
+    double score = player->score() - bot->score();
+    new_ScoreTime.push_back(to_string(score));
+    new_ScoreTime.push_back(to_string(duration));
+    // Sort the vector array based on the first and second elements of each sub-vector
+    sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+    if (ScoreTimePairs.size() < 10)
+        ScoreTimePairs.push_back(new_ScoreTime);
+    else if (stod(new_ScoreTime[0]) > stod(ScoreTimePairs[ScoreTimePairs.size()-1][0])){
+                ScoreTimePairs.pop_back();
+                ScoreTimePairs.push_back(new_ScoreTime);
+            }
+    
+    
+    // Sort the vector array based on the first and second elements of each sub-vector
+    sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+
+
+
+    ofstream outputFile("ScoreTime.txt"); // Open the file for writing
+    if (outputFile.is_open()) {
+        for (const auto& pair : ScoreTimePairs) {
+            for (const auto& value : pair) {
+                outputFile << value << " "; // Write each value separated by a space
+            }
+            outputFile << endl; // Write a new line after each pair
+        }
     }
 }
