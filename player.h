@@ -2,6 +2,7 @@
 #define PLAYER_H
 #include "board.h"
 #include <ncurses.h>
+#include <random>
 
 class Player : public Board {
 
