@@ -149,7 +149,7 @@ void menu(string &game_state){
             int n=1;
             for (int i=0; i<ScoreTimePairs.size(); i++){
                 mvwprintw(content, i+2, 2, "%d.", n);
-                mvwprintw(content, i+2, 5, "%s", (ScoreTimePairs[i][0]));
+                mvwprintw(content, i+2, 5, "%s", (ScoreTimePairs[i][0]).c_str());
                 mvwprintw(content, i+2, 9, "%dmin %ds", (stoi(ScoreTimePairs[i][1])/60), (stoi(ScoreTimePairs[i][1])%60));
                 n++;
             }

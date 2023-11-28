@@ -84,7 +84,7 @@ void Manager::gameplay() {
     WINDOW* player_status = newwin(10, 20, 44, xmax - 53);
 
     //start timer
-    clock_t start = clock();
+    auto start = chrono::high_resolution_clock::now();
     
     while (! check_win()) {
         bot->draw(bot_board);
@@ -99,6 +99,20 @@ void Manager::gameplay() {
                     //save the game
                     bot->store_state("bot_state.txt");
                     player->store_state("player_state.txt");
+
+                    // stop the clock
+                    auto end = chrono::high_resolution_clock::now();
+
+                    // calculate the elapsed time
+                    chrono::duration<double> elapsed = end - start;
+                    duration += elapsed.count();
+                    
+                    // store the duration
+                    ofstream fout;
+                    fout.open("duration.txt");
+                    fout << duration;
+                    fout.close();
+
                     endwin(); // end all windows
                     exit(1); //quit game
                 }
@@ -119,7 +133,15 @@ void Manager::gameplay() {
         switch_player();
 
     }
-    clock_t end = clock();
+    // stop the clock
+    auto end = chrono::high_resolution_clock::now();
+
+    // calculate the elapsed time
+    chrono::duration<double> elapsed = end - start;
+    duration += elapsed.count();
+    
+    update_score_time(duration);
+
     game_state = "menu";
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
@@ -137,8 +159,20 @@ void Manager::run() {
         // menu stuff
         menu(game_state);
         if (game_state == "game"){
+            //continue
+
             bot->load_state("bot_state.txt");
             player->load_state("player_state.txt");
+            
+            //load duration
+            ifstream fin;
+            fin.open("duration.txt");
+            fin >> duration;
+            fin.close();
+        }
+        else {
+            // new gae
+            duration = 0;
         }
     }
     else if (game_state == "pregame") {

@@ -31,6 +31,8 @@ private:
     char previous_player; // this will be used to implement the turn based mechanics
     int ymax;
     int xmax;
+
+    double duration;
 };
 
 void menu(string &game_state);
