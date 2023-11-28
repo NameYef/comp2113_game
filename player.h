@@ -11,6 +11,15 @@ public:
     
     // method for gameplay
     void bot_attack();
+    void bot_at_0(mt19937& gen);
+    void bot_at_1(mt19937& gen);
+    void bot_at_2(mt19937& gen);
+    void bot_at_3(mt19937& gen);
+    void bot_at_4(mt19937& gen);
+    void bot_at_neg1(mt19937& gen);
+    void bot_at_neg2(mt19937& gen);
+    void bot_at_neg3(mt19937& gen);
+    void bot_at_neg4(mt19937& gen);
 
 private:
     void state_set(char& direction, int& head_x, int& head_y, int& no_of_blocks, int state_no);
