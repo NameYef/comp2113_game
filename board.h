@@ -3,6 +3,7 @@
 #include <vector>
 #include <ncurses.h>
 #include <fstream>
+#include <cstring>
 using namespace std;
 
 class Board {

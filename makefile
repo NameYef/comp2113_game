@@ -19,7 +19,7 @@ menu.o: menu.cpp menu.h
 	g++ $(FLAGS) -c $<
 
 main: board.o bot.o player.o manager.o start_title.o menu.o main.cpp
-	g++ $(FLAGS) $^ -o $@ -lncurses
+	g++ $(FLAGS) $^ -o $@ -lncursesw
 
 clean:
 	rm -f main manager.o player.o bot.o board.o menu.o start_title.o

@@ -2,10 +2,11 @@
 #include <string>
 #include <iostream>
 #include "menu.h"
-#include <vector>
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <algorithm>
+
 using namespace std;
 
 // Custom comparator function
@@ -143,7 +144,7 @@ void menu(string &game_state){
                 inputFile.close(); // Close the file
             }
             // Sort the vector array based on the first and second elements of each sub-vector
-            sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
+            // sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
             //input data
             mvwprintw(content, 1,2, "rank:");
             int n=1;

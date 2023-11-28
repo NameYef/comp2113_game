@@ -223,7 +223,7 @@ bool Bot::player_attack(WINDOW* win) {
             
         }
     }
-
+    return false;
 }
 
 
