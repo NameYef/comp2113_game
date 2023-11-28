@@ -91,6 +91,9 @@ void Manager::gameplay() {
         this->draw_status(bot_status, "bot");
         this->draw_status(player_status, "player");
 
+        if (check_win()) {
+            break;
+        }
 
         
         if (previous_player == "bot") {
@@ -120,10 +123,6 @@ void Manager::gameplay() {
 
         switch_player();
 
-        if (check_win()) {
-
-            break;
-        }
 
     }
 
@@ -131,10 +130,18 @@ void Manager::gameplay() {
     // below here add a window to tell player who won, and also store the info of this game into a file
 
     werase(announcer);
-    mvwprintw(announcer, 2, 4, "%s won!", previous_player);
+    box(announcer,0, 0);
+    (previous_player == "player") ? mvwprintw(announcer, 2, 9, "Player won!") : mvwprintw(announcer, 2, 12, "Bot won!");
+    mvwprintw(announcer, 4, 6, "Press any key to quit");
     wrefresh(announcer);
 
     getch();
+    clear();
+    delwin(bot_board);
+    delwin(player_board);
+    delwin(bot_status);
+    delwin(player_status);
+    delwin(announcer);
     game_state = "quit";
     return;
 }

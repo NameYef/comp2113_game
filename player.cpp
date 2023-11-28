@@ -222,6 +222,7 @@ void Player::setup() {
 
     // create new window for set up
     WINDOW* win = newwin(41, 83, 0, 0);
+    WINDOW* instruction = newwin(10, 39, 15, 88);
     refresh();
 
     // variables only used in this method
@@ -232,6 +233,17 @@ void Player::setup() {
 
     // a while loop to place every ship
     while (current_ship < no_of_ships) {
+        
+        box(instruction, 0, 0);
+        mvwprintw(instruction, 2, 13, "Player set-up");
+        mvwprintw(instruction, 4, 8, "Arrow keys to move ship");
+        mvwprintw(instruction, 5, 9, "SPACE to rotate ship");
+        mvwprintw(instruction, 6, 12, "ENTER to confirm");
+        mvwprintw(instruction, 7, 8, "%d out of 6 ships placed", current_ship);
+        wrefresh(instruction);
+
+
+
 
         // getting the head coordinates of the ship
         int head_x = (size_of_board - 1) / 2;
@@ -314,7 +326,10 @@ void Player::setup() {
     //erase the window when finish set up
     werase(win);
     wrefresh(win);
+    werase(instruction);
+    wrefresh(instruction);
     delwin(win);
+    delwin(instruction);
     clear();
     move(0, 0);
     // refresh();
