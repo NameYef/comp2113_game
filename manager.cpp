@@ -13,7 +13,8 @@ Manager::Manager() {
     player = new Player();
     bot = new Bot();
     game_state = "menu";
-    previous_player = 'b';
+    previous_player = "bot";
+    paused = false;
     getmaxyx(stdscr, ymax, xmax);
 }
 
@@ -28,6 +29,7 @@ void Manager::game_setup() {
     if (player->setup()){
         //save the game
         game_state = "quit";
+        return;
     }
 
     game_state = "game";
@@ -93,10 +95,10 @@ void Manager::gameplay() {
     WINDOW* player_status = newwin(10, 20, 44, 202 - 53);
     WINDOW* announcer = newwin(10, 202 - 170, 20, 85);
     
+    //start timer
     auto start = chrono::high_resolution_clock::now();
-    
     while (1) {
-        //start timer
+        paused = false;
 
         bot->draw(bot_board);
         player->draw(player_board);
@@ -118,10 +120,10 @@ void Manager::gameplay() {
             mvwprintw(announcer,4, 8, "ENTER to attack");
             refresh();
             wrefresh(announcer);
-            bot->player_attack(bot_board);
+
 
             while (true){
-                if (bot->player_attack(bot_board)){
+                if (bot->player_attack(bot_board, paused)){
                     //save the game
                     bot->store_state("bot_state.txt");
                     player->store_state("player_state.txt");
@@ -144,14 +146,11 @@ void Manager::gameplay() {
                     return;
                 }
                 else {
-                    bot->draw(bot_board);
-                    player->draw(player_board);
-                    this->draw_status(bot_status, "bot");
-                    this->draw_status(player_status, "player");
+                    break;
                 }
             }
         }
-        else if (previous_player == "player") {
+        else if (previous_player == "player" && !paused) {
             // bot's turn to attack
             werase(announcer);
             box(announcer, 0, 0);
@@ -163,8 +162,10 @@ void Manager::gameplay() {
             getch();
         }
 
+        if (!paused) {
+            switch_player();
+        }
 
-        switch_player();
 
 
     }
@@ -183,21 +184,22 @@ void Manager::gameplay() {
     werase(announcer);
     box(announcer,0, 0);
     (previous_player == "player") ? mvwprintw(announcer, 2, 9, "Player won!") : mvwprintw(announcer, 2, 12, "Bot won!");
-    mvwprintw(announcer, 4, 6, "Press any key to quit");
+    mvwprintw(announcer, 4, 6, "Press any key to continue");
     wrefresh(announcer);
-
-    string name;
-    name = enter_name();
-    update_score_time(duration, name);
-
     getch();
+
     clear();
     delwin(bot_board);
     delwin(player_board);
     delwin(bot_status);
     delwin(player_status);
     delwin(announcer);
-    game_state = "quit";
+
+    string name;
+    name = enter_name();
+    update_score_time(duration, name);
+
+ 
     return;
 }
 
@@ -257,7 +259,7 @@ void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
 string Manager::enter_name(){
 
     // keypad(stdscr, true);  // Enable keypad for arrow key input
-    // echo();  // Allow echoing of user input
+    echo();  // Allow echoing of user input
 
     clear();  // Clear the screen
 
@@ -274,11 +276,12 @@ string Manager::enter_name(){
     // Display the message
     mvprintw(row, col, message);
     mvprintw(row+1, col, "My name is ");
+    move(row + 1, col + 6);
     char str[100];
     getstr(str);
 
     refresh();  // Refresh the screen
-
+    
     string name(str);
     noecho();  // Disable echoing of user input
     return name;

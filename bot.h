@@ -8,7 +8,7 @@ class Bot : public Board {
 public:
     // method for set up
     void setup();
-    bool player_attack(WINDOW* win);
+    bool player_attack(WINDOW* win, bool& paused);
     // method for gameplay
     
 

@@ -135,7 +135,7 @@ bool Bot::hit(int cursor_x, int cursor_y) {
     return false;
 
 }
-bool Bot::player_attack(WINDOW* win) {
+bool Bot::player_attack(WINDOW* win, bool& paused) {
     bool attacked = false;
     int input;
     while (! attacked) {
@@ -218,6 +218,7 @@ bool Bot::player_attack(WINDOW* win) {
                         return true;
                     }
                     else {
+                        paused = true;
                         return false;    
                     }
                 default:

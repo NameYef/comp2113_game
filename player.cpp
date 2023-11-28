@@ -217,6 +217,7 @@ void Player::bot_attack(){
         }
 }
 
+
 bool Player::setup() {
 
     // create new window for set up
@@ -232,17 +233,6 @@ bool Player::setup() {
 
     // a while loop to place every ship
     while (current_ship < no_of_ships) {
-        
-        box(instruction, 0, 0);
-        mvwprintw(instruction, 2, 13, "Player set-up");
-        mvwprintw(instruction, 4, 8, "Arrow keys to move ship");
-        mvwprintw(instruction, 5, 9, "SPACE to rotate ship");
-        mvwprintw(instruction, 6, 12, "ENTER to confirm");
-        mvwprintw(instruction, 7, 8, "%d out of 6 ships placed", current_ship);
-        wrefresh(instruction);
-
-
-
 
         // getting the head coordinates of the ship
         int head_x = (size_of_board - 1) / 2;
@@ -256,6 +246,14 @@ bool Player::setup() {
 
         // while loop to keep prompting the player to place the ship in a valid spot
         while (!ship_set) {
+            refresh();
+            box(instruction, 0, 0);
+            mvwprintw(instruction, 2, 13, "Player set-up");
+            mvwprintw(instruction, 4, 8, "Arrow keys to move ship");
+            mvwprintw(instruction, 5, 9, "SPACE to rotate ship");
+            mvwprintw(instruction, 6, 12, "ENTER to confirm");
+            mvwprintw(instruction, 7, 8, "%d out of 6 ships placed", current_ship);
+            wrefresh(instruction);
 
             // set the state to 3 for the ship location to let player see where the ship currently is
             this->state_set(direction, head_x, head_y, no_of_blocks, 3);
@@ -316,8 +314,19 @@ bool Player::setup() {
                         break;
                     }
                 case 27: // 27 means escape
-                    if (this->confirmQuit())
-                        return true;                
+                    if (this->confirmQuit()) {
+                        werase(win);
+                        wrefresh(win);
+                        werase(instruction);
+                        wrefresh(instruction);
+                        clear();
+                        move(0, 0);
+                        refresh();
+                        return true;
+                    }
+                    else {
+                        break;
+                    }       
             }
         }
         // move on to the next ship

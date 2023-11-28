@@ -30,7 +30,7 @@ private:
     string previous_player; // this will be used to implement the turn based mechanics
     int ymax;
     int xmax; //xmax is 202
-
+    bool paused;
     double duration;
 };
 

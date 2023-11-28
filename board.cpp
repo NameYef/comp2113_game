@@ -180,8 +180,8 @@ void Board::draw(WINDOW* win) {
 
 bool Board::confirmQuit() {
 
-    keypad(stdscr, true);  // Enable keypad for arrow key input
-    noecho();  // Disable echoing of user input
+    // keypad(stdscr, true);  // Enable keypad for arrow key input
+    // noecho();  // Disable echoing of user input
 
     clear();  // Clear the screen
 

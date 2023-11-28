@@ -146,13 +146,13 @@ void menu(string &game_state){
             // Sort the vector array based on the first and second elements of each sub-vector
             // sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
             //input data
-            mvwprintw(content, 1,2, "rank:");
+            mvwprintw(content, 1,2, "rank: (score, time, name)");
             int n=1;
             for (int i=0; i<ScoreTimePairs.size(); i++){
                 mvwprintw(content, i+2, 2, "%d.", n);
                 mvwprintw(content, i+2, 5, "%s", (ScoreTimePairs[i][0]).c_str());
-                mvwprintw(content, i+2, 9, "%dmin %ds", (stoi(ScoreTimePairs[i][1])/60), (stoi(ScoreTimePairs[i][1])%60));
-                mvwprintw(content, i+2, 20, "%s", (ScoreTimePairs[i][2]).c_str());
+                mvwprintw(content, i+2, 20, "%dmin %ds", (stoi(ScoreTimePairs[i][1])/60), (stoi(ScoreTimePairs[i][1])%60));
+                mvwprintw(content, i+2, 30, "%s", (ScoreTimePairs[i][2]).c_str());
                 n++;
             }
 
