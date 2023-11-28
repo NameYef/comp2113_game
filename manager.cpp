@@ -27,8 +27,7 @@ void Manager::game_setup() {
     bot->setup();
     if (player->setup()){
         //save the game
-        endwin(); // end all windows
-        exit(1); //quit game
+        game_state = "quit";
     }
 
     game_state = "game";
@@ -116,8 +115,9 @@ void Manager::gameplay() {
                     fout << duration;
                     fout.close();
 
-                    endwin(); // end all windows
-                    exit(1); //quit game
+                    endwin();
+                    game_state = "quit";
+                    return;
                 }
                 else {
                     bot->draw(bot_board);
@@ -162,6 +162,7 @@ void Manager::run() {
     if (game_state == "menu") {
         // menu stuff
         menu(game_state);
+
         if (game_state == "game"){
             //continue
 

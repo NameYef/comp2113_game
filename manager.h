@@ -19,7 +19,6 @@ public:
     void draw_status(WINDOW* win, char user);
     void run(); // wrap the whole thing together to run in main
     string game_state; // to know what phase of the game is
-    void confirmQuit();
     void update_score_time(double duration, string name);
     string enter_name();
 private:
@@ -35,7 +34,7 @@ private:
     double duration;
 };
 
-void menu(string &game_state);
+
 
 
 #endif

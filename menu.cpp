@@ -207,8 +207,7 @@ void menu(string &game_state){
         }
         if(choice == 10 && highlight == 4){
             //exit game
-            endwin(); // end all windows
-            exit(1); //quit game
+            game_state = "quit";
             break;
         }
 
