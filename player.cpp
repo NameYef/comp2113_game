@@ -80,143 +80,254 @@ void Player::ship_set(char direction, int current_ship, int head_x, int head_y, 
 }
 
 
+void Player::bot_at_0(mt19937& gen){
+	uniform_int_distribution<> intd(0,size_of_board - 1);
+        int check_x=intd(gen);
+        int check_y=intd(gen);
+        while(bot_overlap(check_x, check_y)){
+                check_x=intd(gen);
+                check_y=intd(gen);
+        }
+        if(state[check_x][check_y]==1){
+                state[check_x][check_y]=4;
+        }
+        else if(state[check_x][check_y]==2){
+                state[check_x][check_y]=5;
+                hit(check_x,check_y);
+                bot_attempts=4;
+                coordinate_x=check_x;
+                coordinate_y=check_y;
+                original_x=check_x;
+                original_y=check_y;
+        }
+}
+
+void Player::bot_at_4(mt19937& gen){
+		if(coordinate_x-1<0){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+			bot_at_3(gen);
+			return;
+		}
+		else if(bot_overlap(coordinate_x-1, coordinate_y)){
+                        bot_at_3(gen);
+			return;
+                }
+                else if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]==2)){
+                        state[coordinate_x-1][coordinate_y]=5;
+                        hit(coordinate_x-1,coordinate_y);
+                        bot_attempts=-4;
+                        coordinate_x=coordinate_x-1;
+                }
+                else{
+                        state[coordinate_x-1][coordinate_y]=4;
+                        bot_attempts=3;
+                }
+}
+
+void Player::bot_at_3(mt19937& gen){
+                if(coordinate_y-1<0){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_2(gen);
+			return;
+                }
+                else if(bot_overlap(coordinate_x, coordinate_y-1)){
+                        bot_at_2(gen);
+			return;
+                }
+                else if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]==2)){
+                        state[coordinate_x][coordinate_y-1]=5;
+                        bot_attempts=-3;
+                        hit(coordinate_x,coordinate_y-1);
+                        coordinate_y=coordinate_y-1;
+                }
+                else{
+                        state[coordinate_x][coordinate_y-1]=4;
+                        bot_attempts=2;
+                }
+}
+
+void Player::bot_at_2(mt19937& gen){
+                if(coordinate_x+1>size_of_board-1){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_1(gen);
+                        return;
+                }
+                else if(bot_overlap(coordinate_x+1, coordinate_y)){
+                        bot_at_1(gen);
+			return;
+                }
+                else if((coordinate_x+1<=size_of_board-1)&&(state[coordinate_x+1][coordinate_y]==2)){
+                        state[coordinate_x+1][coordinate_y]=5;
+                        bot_attempts=-2;
+                        hit(coordinate_x+1,coordinate_y);
+                        coordinate_x=coordinate_x+1;
+                }
+                else{
+                        state[coordinate_x+1][coordinate_y]=4;
+                        bot_attempts=1;
+                }
+}
+
+void Player::bot_at_1(mt19937& gen){
+                if(coordinate_y+1>size_of_board-1){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_0(gen);
+                        return;
+                }
+		else if(bot_overlap(coordinate_x, coordinate_y+1)){
+			bot_at_0(gen);
+			return;
+                }
+		else if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
+                        state[coordinate_x][coordinate_y+1]=5;
+                        bot_attempts=-1;
+                        hit(coordinate_x,coordinate_y+1);
+                        coordinate_y=coordinate_y+1;
+                }
+                else{
+                        state[coordinate_x][coordinate_y+1]=4;
+                        bot_attempts=0;
+                }
+}
+
+void Player::bot_at_neg4(mt19937& gen){
+                if(coordinate_x-1<0){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_3(gen);
+			return;
+                }
+		else if(bot_overlap(coordinate_x-1, coordinate_y)){
+			coordinate_x=original_x;
+                        coordinate_y=original_y;
+			bot_at_3(gen);
+			return;
+		}
+                else if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]==2)){
+                        state[coordinate_x-1][coordinate_y]=5;
+                        hit(coordinate_x-1,coordinate_y);
+                        coordinate_x=coordinate_x-1;
+                }
+                else if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]!=2)){
+                        bot_attempts=3;
+                        state[coordinate_x-1][coordinate_y]=4;
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                }
+}
+
+void Player::bot_at_neg3(mt19937& gen){
+                if(coordinate_y-1<0){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_2(gen);
+                        return;
+                }
+		else if(bot_overlap(coordinate_x, coordinate_y-1)){
+			coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_2(gen);
+			return;
+		}
+                else if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]==2)){
+                        state[coordinate_x][coordinate_y-1]=5;
+                                    hit(coordinate_x,coordinate_y-1);
+                        coordinate_y=coordinate_y-1;
+                }
+                else if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]!=2)){
+                        bot_attempts=2;
+                        state[coordinate_x][coordinate_y-1]=4;
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                }
+}
+
+void Player::bot_at_neg2(mt19937& gen){
+                if(coordinate_x+1>size_of_board-1){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_1(gen);
+                        return;
+                }
+		else if(bot_overlap(coordinate_x+1, coordinate_y)){
+			coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_1(gen);
+			return;
+		}
+		else if((coordinate_x+1<=size_of_board-1)&&(state[coordinate_x+1][coordinate_y]==2)){
+                        state[coordinate_x+1][coordinate_y]=5;
+                                    hit(coordinate_x+1,coordinate_y);
+                        coordinate_x=coordinate_x+1;
+                }
+                else if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]!=2)){
+                        bot_attempts=1;
+                        state[coordinate_x+1][coordinate_y]=4;
+                                    coordinate_x=original_x;
+                        coordinate_y=original_y;
+                }
+}
+
+void Player::bot_at_neg1(mt19937& gen){
+                if(coordinate_y+1>size_of_board - 1){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_0(gen);
+                        return;
+                }
+                else if(bot_overlap(coordinate_x, coordinate_y+1)){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
+                        bot_at_0(gen);
+                        return;
+                }
+		else if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
+                        state[coordinate_x][coordinate_y+1]=5;
+                        hit(coordinate_x,coordinate_y+1);
+                        coordinate_y=coordinate_y+1;
+                }
+                else if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]!=2)){
+                        bot_attempts=0;
+                        state[coordinate_x][coordinate_y+1]=4;
+                }
+}
+
 void Player::bot_attack(){
 	random_device rd;
 	mt19937 gen(rd());
 	if(bot_attempts==0)
 	{
-		uniform_int_distribution<> intd(0,size_of_board - 1);
-		int check_x=intd(gen);
-		int check_y=intd(gen);
-		while(bot_overlap(check_x, check_y)){
-			check_x=intd(gen);
-	        	check_y=intd(gen);
-		}
-		if(state[check_x][check_y]==1){
-			state[check_x][check_y]=4;
-		}
-		else if(state[check_x][check_y]==2){
-			state[check_x][check_y]=5;
-			hit(check_x,check_y);
-			bot_attempts=4;
-			coordinate_x=check_x;
-			coordinate_y=check_y;
-			original_x=check_x;
-			original_y=check_y;
-		}
+		bot_at_0(gen);
 	}
 	else if(bot_attempts==4){
-		if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]==2)){
-			state[coordinate_x][coordinate_y-1]=5;
-			hit(coordinate_x,coordinate_y-1);
-			bot_attempts=-4;
-			coordinate_y=coordinate_y-1;
-		}
-		else{
-			state[coordinate_x][coordinate_y-1]=4;
-			bot_attempts=3;
-		}
+		bot_at_4(gen);
 	}
 	else if(bot_attempts==3){
-		if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]==2)){
-			state[coordinate_x-1][coordinate_y]=5;
-			bot_attempts=-3;
-			hit(coordinate_x-1,coordinate_y);
-			coordinate_x=coordinate_x-1;
-		}
-		else{
-			state[coordinate_x-1][coordinate_y]=4;
-			bot_attempts=2;
-		}
+		bot_at_3(gen);
 	}
 	else if(bot_attempts==2){
-		if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
-			state[coordinate_x][coordinate_y+1]=5;
-			bot_attempts=-2;
-			hit(coordinate_x,coordinate_y+1);
-			coordinate_y=coordinate_y+1;
-		}
-		else{
-			state[coordinate_x][coordinate_y+1]=4;
-			bot_attempts=1;
-		}
+		bot_at_2(gen);
 	}
 	else if (bot_attempts==1){
-		if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]==2)){
-			state[coordinate_x+1][coordinate_y]=5;
-			bot_attempts=-1;
-			hit(coordinate_x+1,coordinate_y);
-			coordinate_x=coordinate_x+1;
-		}
-		else{
-			state[coordinate_x+1][coordinate_y]=4;
-			bot_attempts=0;
-		}
+		bot_at_1(gen);
 	}
 	else if(bot_attempts==-4){
-		if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]==2)){
-			state[coordinate_x][coordinate_y-1]=5;
-			hit(coordinate_x,coordinate_y-1);
-			coordinate_y=coordinate_y-1;
-		}
-		else if((coordinate_y-1>=0)&&(state[coordinate_x][coordinate_y-1]!=2)){
-			bot_attempts=3;
-			state[coordinate_x][coordinate_y-1]=4;
-			coordinate_x=original_x;
-			coordinate_y=original_y;
-		}
-		else if(coordinate_y-1<0){
-			bot_attempts=3;
-		}
+		bot_at_neg4(gen);
 	}
 	else if(bot_attempts==-3){
-                if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]==2)){
-                        state[coordinate_x-1][coordinate_y]=5;
-			            hit(coordinate_x-1,coordinate_y);
-                        coordinate_x=coordinate_x-1;
-                }
-                else if((coordinate_x-1>=0)&&(state[coordinate_x-1][coordinate_y]!=2)){
-                        bot_attempts=2;
-                        state[coordinate_x-1][coordinate_y]=4;
-			            coordinate_x=original_x;
-                        coordinate_y=original_y;
-                }
-                else if(coordinate_x-1<0){
-                        bot_attempts=2;
-                }
+		bot_at_neg3(gen);
         }
 	else if(bot_attempts==-2){
-                if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]==2)){
-                        state[coordinate_x][coordinate_y+1]=5;
-			            hit(coordinate_x,coordinate_y+1);
-                        coordinate_y=coordinate_y+1;
-                }
-                else if((coordinate_y+1<=size_of_board - 1)&&(state[coordinate_x][coordinate_y+1]!=2)){
-                        bot_attempts=1;
-                        state[coordinate_x][coordinate_y+1]=4;
-			            coordinate_x=original_x;
-                        coordinate_y=original_y;
-                }
-                else if(coordinate_y+1>size_of_board - 1){
-                        bot_attempts=1;
-                }
+		bot_at_neg2(gen);
         }
         else if(bot_attempts==-1){
-                if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]==2)){
-                        state[coordinate_x+1][coordinate_y]=5;
-			hit(coordinate_x+1,coordinate_y);
-                        coordinate_x=coordinate_x+1;
-                }
-                else if((coordinate_x+1<=size_of_board - 1)&&(state[coordinate_x+1][coordinate_y]!=2)){
-                        bot_attempts=0;
-                        state[coordinate_x+1][coordinate_y]=4;
-                }
-                else if(coordinate_x+1>size_of_board - 1){
-                        bot_attempts=0;
-                }
+		bot_at_neg1(gen);
         }
 }
-
 
 bool Player::setup() {
 
