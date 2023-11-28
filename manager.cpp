@@ -212,7 +212,7 @@ void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
 string Manager::enter_name(){
 
     keypad(stdscr, true);  // Enable keypad for arrow key input
-    noecho();  // Disable echoing of user input
+    echo();  // Allow echoing of user input
 
     clear();  // Clear the screen
 
@@ -235,6 +235,7 @@ string Manager::enter_name(){
     refresh();  // Refresh the screen
 
     string name(str);
+    noecho();  // Disable echoing of user input
     return name;
 }
 //run when user win
