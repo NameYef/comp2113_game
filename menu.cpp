@@ -136,9 +136,9 @@ void menu(string &game_state){
 
             ifstream inputFile("ScoreTime.txt"); // Open the file for reading
             if (inputFile.is_open()) {
-                string score, time;
-                while (inputFile >> score >> time) {
-                    ScoreTimePairs.push_back({score, time}); // Add each pair to the 2D vector
+                string score, time, name;
+                while (inputFile >> score >> time >> name) {
+                    ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
                 }
                 inputFile.close(); // Close the file
             }
@@ -151,6 +151,7 @@ void menu(string &game_state){
                 mvwprintw(content, i+2, 2, "%d.", n);
                 mvwprintw(content, i+2, 5, "%s", (ScoreTimePairs[i][0]).c_str());
                 mvwprintw(content, i+2, 9, "%dmin %ds", (stoi(ScoreTimePairs[i][1])/60), (stoi(ScoreTimePairs[i][1])%60));
+                mvwprintw(content, i+2, 20, "%s", (ScoreTimePairs[i][2]).c_str());
                 n++;
             }
 

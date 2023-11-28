@@ -1,6 +1,8 @@
 #include "manager.h"
 #include <iostream>
 #include <ctime>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
 
 using namespace std;
@@ -139,15 +141,16 @@ void Manager::gameplay() {
     // calculate the elapsed time
     chrono::duration<double> elapsed = end - start;
     duration += elapsed.count();
-    
-    update_score_time(duration);
+
 
     game_state = "menu";
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
 
 
-
+    string name;
+    name = enter_name();
+    update_score_time(duration, name);
 
     getch();
 
@@ -206,18 +209,50 @@ void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
 }
 */
 
-//run when user win
-void Manager::update_score_time(double duration) {
+string Manager::enter_name(){
 
-    vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs
+    keypad(stdscr, true);  // Enable keypad for arrow key input
+    noecho();  // Disable echoing of user input
+
+    clear();  // Clear the screen
+
+    // Get the dimensions of the terminal window
+    int maxRows, maxCols;
+    getmaxyx(stdscr, maxRows, maxCols);
+
+    // Center the message on the screen
+    const char* message = "Congrats. You win. Please enter your name:";
+    int messageLength = strlen(message);
+    int row = maxRows / 2;
+    int col = (maxCols - messageLength) / 2;
+
+    // Display the message
+    mvprintw(row, col, message);
+    mvprintw(row+1, col, "My name is ");
+    char str[100];
+    getstr(str);
+
+    refresh();  // Refresh the screen
+
+    string name(str);
+    return name;
+}
+//run when user win
+void Manager::update_score_time(double duration, string name) {
+
+    vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs+name
 
     ifstream inputFile("ScoreTime.txt"); // Open the file for reading
     if (inputFile.is_open()) {
-        string score, time;
-        while (inputFile >> score >> time) {
-            ScoreTimePairs.push_back({score, time}); // Add each pair to the 2D vector
-        }
+        string score, time, name;
+        string line;
+        while (getline(inputFile, line)) {
+            istringstream iss(line);
+            if (iss >> score >> time >> name) {
+            ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
+            }
         inputFile.close(); // Close the file
+        }
     }
 
     //add new score and time to the rank
@@ -225,6 +260,8 @@ void Manager::update_score_time(double duration) {
     double score = player->score() - bot->score();
     new_ScoreTime.push_back(to_string(score));
     new_ScoreTime.push_back(to_string(duration));
+    //add name also
+    new_ScoreTime.push_back(name);
     // Sort the vector array based on the first and second elements of each sub-vector
     sort(ScoreTimePairs.begin(), ScoreTimePairs.end(), customComparator);
     if (ScoreTimePairs.size() < 10)
