@@ -177,7 +177,10 @@ void Manager::gameplay() {
     duration += elapsed.count();
 
 
-    game_state = "menu";
+    game_state = "done";
+    remove("bot_state.txt");
+    remove("player_state.txt");
+    remove("duration.txt");
     // previous_player won, type anything then can return to menu
     // below here add a window to tell player who won, and also store the info of this game into a file
 

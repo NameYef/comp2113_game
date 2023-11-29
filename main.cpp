@@ -32,12 +32,23 @@ void game_init(){
 int main(int argc, char ** argv) {
 
     game_init();
-    Manager* manager = new Manager();
+    Manager* manager = nullptr;
 
-    while (manager->game_state != "quit") {
+    while (1) {
+        
+        if (manager == nullptr) {
+          manager = new Manager();
+        }
 
-    manager->run();
-    
+        manager->run();
+
+        if (manager->game_state == "quit") {
+          break;
+        }
+        if (manager->game_state == "done") {
+          delete manager;
+          manager = nullptr;
+        }
     }
 
     delete manager;
