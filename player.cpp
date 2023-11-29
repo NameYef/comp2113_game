@@ -112,6 +112,7 @@ void Player::bot_attempts_0(mt19937& gen){
 		//save intial coordinates of attacked cell in coordinate_x and coordinate_y
 		//will need this later since values of coordinate_x and coordinate_y will change and they will no longer store original coordinates of attacked cell
                 original_x=check_x;
+		original_y=check_y;
         }
 }
 
@@ -128,6 +129,8 @@ void Player::bot_attempts_4(mt19937& gen){
 		//check if coordinate was already attacked before
 		//if yes, check next location
 		else if(bot_overlap(coordinate_x-1, coordinate_y)){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts_3(gen);
 			return;
                 }
@@ -147,6 +150,8 @@ void Player::bot_attempts_4(mt19937& gen){
                 else{
                         state[coordinate_x-1][coordinate_y]=4;
 			//bot attempts is 3 now so bot will check next location on the next bot attack
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts=3;
                 }
 }
@@ -164,6 +169,8 @@ void Player::bot_attempts_3(mt19937& gen){
 		//check if coordinate was already attacked before
                 //if yes, check next location
                 else if(bot_overlap(coordinate_x, coordinate_y-1)){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts_2(gen);
 			return;
                 }
@@ -183,6 +190,8 @@ void Player::bot_attempts_3(mt19937& gen){
                 else{
                         state[coordinate_x][coordinate_y-1]=4;
 			//bot attempts is 2 now so bot will check next location on the next bot attack
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts=2;
                 }
 }
@@ -200,6 +209,8 @@ void Player::bot_attempts_2(mt19937& gen){
 		//check if coordinate was already attacked before
                 //if yes, check next location
                 else if(bot_overlap(coordinate_x+1, coordinate_y)){
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts_1(gen);
 			return;
                 }
@@ -219,6 +230,8 @@ void Player::bot_attempts_2(mt19937& gen){
                 else{
                         state[coordinate_x+1][coordinate_y]=4;
 			//bot attempts is 1 now so bot will check next location on the next bot attack
+                        coordinate_x=original_x;
+                        coordinate_y=original_y;
                         bot_attempts=1;
                 }
 }
