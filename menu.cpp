@@ -138,7 +138,8 @@ void menu(string &game_state){
             ifstream inputFile("ScoreTime.txt"); // Open the file for reading
             if (inputFile.is_open()) {
                 string score, time, name;
-                while (inputFile >> score >> time >> name) {
+                while (inputFile >> score >> time) {
+                    getline(inputFile, name);
                     ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
                 }
                 inputFile.close(); // Close the file

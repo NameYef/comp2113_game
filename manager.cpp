@@ -300,8 +300,9 @@ void Manager::update_score_time(double duration, string name) {
         string line;
         while (getline(inputFile, line)) {
             istringstream iss(line);
-            if (iss >> score >> time >> name) {
-            ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
+            if (iss >> score >> time) {
+                getline(iss, name);
+                ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
             }
         inputFile.close(); // Close the file
         }
