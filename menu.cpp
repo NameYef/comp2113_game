@@ -140,6 +140,7 @@ void menu(string &game_state){
                 string score, time, name;
                 while (inputFile >> score >> time) {
                     getline(inputFile, name);
+                    name.erase(0,1);
                     ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
                 }
                 inputFile.close(); // Close the file

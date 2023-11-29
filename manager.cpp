@@ -304,6 +304,7 @@ void Manager::update_score_time(double duration, string name) {
             istringstream iss(line);
             if (iss >> score >> time) {
                 getline(iss, name);
+                name.erase(0,1);
                 ScoreTimePairs.push_back({score, time, name}); // Add each pair+name to the 2D vector
             }
         }
