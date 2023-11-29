@@ -183,8 +183,8 @@ void Manager::gameplay() {
 
     werase(announcer);
     box(announcer,0, 0);
-    (previous_player == "player") ? mvwprintw(announcer, 2, 9, "Player won!") : mvwprintw(announcer, 2, 12, "Bot won!");
-    mvwprintw(announcer, 4, 6, "Press any key to continue");
+    (previous_player == "player") ? mvwprintw(announcer, 2, 10, "Player won!") : mvwprintw(announcer, 2, 12, "Bot won!");
+    mvwprintw(announcer, 4, 4, "Press any key to continue");
     wrefresh(announcer);
     getch();
 
@@ -276,14 +276,17 @@ string Manager::enter_name(){
     // Display the message
     mvprintw(row, col, message);
     mvprintw(row+1, col, "My name is ");
-    move(row + 1, col + 6);
+    move(row + 1, col + 12);
     char str[100];
     getstr(str);
 
     refresh();  // Refresh the screen
-    
-    string name(str);
+    if (str[0] == '\0') {
+        strcpy(str, "unnamed");
+    }
+
     noecho();  // Disable echoing of user input
+    string name(str); 
     return name;
 }
 //run when user win

@@ -104,15 +104,15 @@ void Bot::setup() {
 
     }
 
-    WINDOW* win = newwin(41, 83, 0, 0);
-    refresh();
-    this->draw(win);
-    getch();
-    werase(win);
-    wrefresh(win);
-    delwin(win);
-    clear();
-    move(0, 0);
+    // WINDOW* win = newwin(41, 83, 0, 0);
+    // refresh();
+    // this->draw(win);
+    // getch();
+    // werase(win);
+    // wrefresh(win);
+    // delwin(win);
+    // clear();
+    // move(0, 0);
     for (int i=0; i< size_of_board; i++){
         for (int j=0; j< size_of_board; j++){
             state[i][j] = 1;
