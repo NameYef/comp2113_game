@@ -268,7 +268,7 @@ string Manager::enter_name(){
     getmaxyx(stdscr, maxRows, maxCols);
 
     // Center the message on the screen
-    const char* message = "Congrats. You win. Please enter your name:";
+    const char* message = "Game ended. Please enter your name:";
     int messageLength = strlen(message);
     int row = maxRows / 2;
     int col = (maxCols - messageLength) / 2;
@@ -287,6 +287,8 @@ string Manager::enter_name(){
 
     noecho();  // Disable echoing of user input
     string name(str); 
+    if (name.length()==0)
+        name = "Unnamed";
     return name;
 }
 //run when user win

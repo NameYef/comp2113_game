@@ -120,7 +120,7 @@ void menu(string &game_state){
         {
             mvwprintw(content, 2, 2, "Controls :");
             mvwprintw(content, 3, 2, "Move -> arrow keys");
-            mvwprintw(content, 4, 2, "Quit game -> dunno yet");
+            mvwprintw(content, 4, 2, "Quit game -> ESC");
             mvwprintw(content, 5, 2, "plant your ships first");
             mvwprintw(content, 6, 2, "change direction of ship -> space");
             mvwprintw(content, 7, 2, "select the box you want to attack");
