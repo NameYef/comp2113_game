@@ -4,6 +4,7 @@
 #include <iterator>
 using namespace std;
 
+// Check if the genernated coordinates are within the board of the bot's side
 bool Bot::valid(char direction, int head_x, int head_y, int no_of_blocks) {
     if (direction == 'h') {
         if (head_x + no_of_blocks - 1 >= size_of_board) {
@@ -19,6 +20,7 @@ bool Bot::valid(char direction, int head_x, int head_y, int no_of_blocks) {
 
 }
 
+// Check if the generated coordinates of new ship overlapping the existing ones
 bool Bot::overlap(char direction, int head_x, int head_y, int no_of_blocks) {
     if (direction == 'h') {
         for (int i = 0; i < no_of_blocks; i++) {
@@ -37,6 +39,7 @@ bool Bot::overlap(char direction, int head_x, int head_y, int no_of_blocks) {
     return false;
 }
 
+// Set the coordinates of the ships in the main board
 void Bot::state_set(char direction, int head_x, int head_y, int no_of_blocks, int state_no) {
     if (direction == 'v') {
         for (int i = 0; i < no_of_blocks; i++) {
@@ -50,6 +53,7 @@ void Bot::state_set(char direction, int head_x, int head_y, int no_of_blocks, in
     }
 }
 
+// Save the ship's coordinates in the vector ships
 void Bot::ship_set(char direction, int current_ship, int head_x, int head_y, int no_of_blocks) {
     if (direction == 'v') {
         for (int i = 0; i < no_of_blocks; i++) {
