@@ -297,8 +297,9 @@ string Manager::enter_name(){
     return name;
 }
 //run when user win
-//update the player's score which will be shown later on leaderboard
-//calculate as (boxed successfully hitted by player * player's accuracy - boxed successfully hitted by bot * bot's accuracy)
+//take duration of gameplay and name of user as input
+//update the player's score, time and inputed name used which will be shown later on leaderboard
+//score calculate as (boxed successfully hitted by player * player's accuracy - boxed successfully hitted by bot * bot's accuracy)
 //positive when win, negative when lose
 void Manager::update_score_time(double duration, string name) {
 
