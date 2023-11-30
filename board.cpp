@@ -113,8 +113,9 @@ void Board::draw(WINDOW* win) {
     refresh();
 }
 
+//display a message to ask whether player confirms quit or not. 
+//returns true if yes false if no
 bool Board::confirmQuit() {
-
 
     clear();  // Clear the screen
 
