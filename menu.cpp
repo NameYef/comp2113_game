@@ -17,6 +17,7 @@ bool customComparator(const vector<string>& a, const vector<string>& b) {
     return stod(a[0]) > stod(b[0]); // Sort based on the first element otherwise
     }
 
+//show a menu for player to select different features before and after game
 void menu(string &game_state){
     //get screen size
     int yMax, xMax;

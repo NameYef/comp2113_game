@@ -259,6 +259,8 @@ void Manager::update_score_time(vector<vector<int>> ScoreTimePairs){
 }
 */
 
+//allow user to input name after game ended (win/lose)
+//return the name
 string Manager::enter_name(){
 
     // keypad(stdscr, true);  // Enable keypad for arrow key input
@@ -295,6 +297,9 @@ string Manager::enter_name(){
     return name;
 }
 //run when user win
+//update the player's score which will be shown later on leaderboard
+//calculate as (boxed successfully hitted by player * player's accuracy - boxed successfully hitted by bot * bot's accuracy)
+//positive when win, negative when lose
 void Manager::update_score_time(double duration, string name) {
 
     vector<vector<string>> ScoreTimePairs; // 2D vector to store score-time pairs+name

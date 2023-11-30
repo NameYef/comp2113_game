@@ -280,7 +280,7 @@ void Board::store_accuracy() {
 }
 */
 
-// return scoring componenet (player's or bot's ships lefted)
+// return scoring componenet (player's or bot's box of ships lefted)
 double Board::score(){
     int count = 32;
     for (const auto& outerVec : ships) {
