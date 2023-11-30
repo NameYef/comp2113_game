@@ -10,6 +10,7 @@
 using namespace std;
 
 // Custom comparator function
+// used in sort() for the vector storing score, time, name set
 bool customComparator(const vector<string>& a, const vector<string>& b) {
     if (stod(a[0]) == stod(b[0])) {
         return stod(a[1]) > stod(b[1]); // Sort based on the second element if the first element is the same
@@ -17,6 +18,7 @@ bool customComparator(const vector<string>& a, const vector<string>& b) {
     return stod(a[0]) > stod(b[0]); // Sort based on the first element otherwise
     }
 
+//input game_state by call by reference, such that when player select start new game or continue, respected game_state will be modified
 void menu(string &game_state){
     //get screen size
     int yMax, xMax;
