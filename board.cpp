@@ -345,11 +345,11 @@ void Board::store_accuracy() {
 }
 */
 double Board::score(){
-    int count = 27;
+    int count = 32;
     for (const auto& outerVec : ships) {
             for (const auto& innerVec : outerVec) {
                 count--;
             }
     }
-    return count*accuracy();
+    return count;
 }

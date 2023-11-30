@@ -316,7 +316,7 @@ void Manager::update_score_time(double duration, string name) {
 
     //add new score and time to the rank
     vector<string> new_ScoreTime;
-    double score = player->score() - bot->score();
+    double score = ((bot->score() * bot->accuracy()) - (player->score() * player->accuracy()));
     new_ScoreTime.push_back(to_string(score));
     new_ScoreTime.push_back(to_string(duration));
     //add name also
