@@ -6,7 +6,6 @@ using namespace std;
 
 // set the board to certain state to represent the location of ships
 void Player::state_set(char& direction, int& head_x, int& head_y, int& no_of_blocks, int state_no) {
-    int tail;
     if (direction == 'v') {
         for (int i = 0; i < no_of_blocks; i++) {
             if (state[head_x][head_y + i] != 2) {

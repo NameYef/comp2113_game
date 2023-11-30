@@ -4,16 +4,16 @@
 
 using namespace std;
 
-
+// board constructor, initialize all necessary variables
 Board::Board() {
     vector<int> size_of_ships = {3, 4, 4, 5, 6, 10};
-    for (int i=0; i< size_of_board; i++){
+    for (int i=0; i< size_of_board; i++){ 
         for (int j=0; j< size_of_board; j++){
-            this->state[i][j] = 1;
+            this->state[i][j] = 1; // setting the state of the board to be blank first
         }
     }
-    // ships is still 3D, elements accessed through ships[i][j][k]
-    // if ship part is blown then can remove that element, the remaining percentage can be shown by ships[i].size() / ships[i].capacity()
+    // ships is 3D, elements accessed through ships[i][j][k]
+    // filling up the ships vector with the correct ship sizes, setting coords to -1 as placeholder
     for (int i = 0; i < no_of_ships; i++) {
         vector<vector<int>> temp1;
         for (int j = 0; j < size_of_ships[i]; j++) {
@@ -26,6 +26,7 @@ Board::Board() {
     }
 }
 
+// bool method to return whether the entire ships vector is empty
 bool Board::ship_empty() {
     for (auto& i : ships) {
         if (! i.empty()) {
@@ -35,11 +36,13 @@ bool Board::ship_empty() {
     return true;
 }
 
+// a getter method to return the ship vector for other classes to use
 const vector<vector<vector<int>>> Board::get_ships() const {
     return ships;
 }
 
 
+// return the number of empty ships in ships vector
 int Board::ship_left() {
     int count = 0;
     for (auto i : ships) {
@@ -52,12 +55,14 @@ int Board::ship_left() {
 
 
 
-
+// draw method to draw the board on screen, input takes a window created using ncurses
 void Board::draw(WINDOW* win) {
+    // make a box around the window
     refresh();
     box(win, 0, 0);
     wrefresh(win);
     int game_row = 2;
+    // drawing the board
     mvwprintw(win, 1, 1, "   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
     for (int i = 0; i < size_of_board; i++) {
 
@@ -68,7 +73,8 @@ void Board::draw(WINDOW* win) {
         column += 4;
         
         for (int j = 0; j < size_of_board; j++) {
-
+            
+            // drawing different symbols according to different state
             switch (state[j][i]) {
                 case -1:
                     mvwprintw(win, game_row, column, " ? |");
@@ -102,86 +108,13 @@ void Board::draw(WINDOW* win) {
         game_row += 2;
         
     }
+    // update memory with the changes so the board can be drawn
     wrefresh(win);
     refresh();
-
-    // cout << "   ";
-    // for (int i=0; i<size_of_board; i++){
-    //     cout << "+---";
-    // }
-    // cout << "+" << endl;
-
-    // // iterate through each slot and its underline(?)
-    // for (int y=0; y<Board::size_of_board; y++){
-    //     // alphabet label
-    //     char c = 'A'+y;
-    //     cout << " " << c << " "; 
-
-    //     for (int x=0; x<Board::size_of_board; x++){
-    //         // occ and bombed
-    //         if (this->state[x][y] == 4){
-    //             cout << "| O ";
-    //         }
-    //         // bombed but NOT occ
-    //         else if (this->state[x][y] == 3){
-    //             cout << "| X ";
-    //         }
-    //         // if revealed
-    //         else if (this->state[x][y] > 0){
-    //             // if occ
-    //             if (this->state[x][y] == 2){
-    //                 if (x>0 && this->state[x-1][y] == 2){
-    //                     // if there is a revealed occ on the left, print this
-    //                     cout << "████";
-    //                 }
-    //                 else {
-    //                     // ifthere is NOT a revealed occ on the left, print this
-    //                     cout << "|███";
-    //                 }
-    //             }
-    //             // not occ
-    //             else {
-    //                 cout << "|   "; 
-    //             }
-    //         }
-    //         // unrevealed
-    //         else {
-    //             cout << "| ? ";
-    //         }
-    //     }
-    //     cout << "|" <<endl;
-
-    //     cout << "   " ;
-    //     for (int x=0; x<Board::size_of_board; x++){
-    //         // if this slot and below are both revealed occ
-    //         if (this->state[x][y] == 2 && y<(Board::size_of_board-1) && this->state[y+1][x] == 2){
-    //             // if slot to the left is revealed occ
-    //             if (x>0 && this->state[x-1][y] == 2){
-    //                 cout << "████";
-    //             }
-    //             else {
-    //                 cout << "+███";
-    //             }
-    //         }
-    //         else {
-    //             cout << "+---";
-    //         }
-    //     }
-    //     cout << "+" << endl;
-    // }
-    
-    // // number label. ? : to make sure align
-    // cout << "   ";
-    // for (int i=1; i<=Board::size_of_board; i++){
-    //     cout << " " << i << (i/10>0 ? " " : "  "); 
-    // }
-    // cout << endl;
 }
 
 bool Board::confirmQuit() {
 
-    // keypad(stdscr, true);  // Enable keypad for arrow key input
-    // noecho();  // Disable echoing of user input
 
     clear();  // Clear the screen
 
@@ -344,6 +277,8 @@ void Board::store_accuracy() {
     }
 }
 */
+
+// calculate score
 double Board::score(){
     int count = 32;
     for (const auto& outerVec : ships) {
