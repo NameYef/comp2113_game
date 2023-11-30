@@ -247,7 +247,7 @@ void Board::load_state(string fname) {
     }
 }
 
-//get player's or bot's accuracy (hitted trials/total trials)
+//return player's or bot's accuracy (hitted trials/total trials)
 double Board::accuracy(){
     double missed_attack_num = 0.0, hitted_attack_num = 0.0;
     for (int i = 0; i < size_of_board; i++) {
@@ -280,7 +280,7 @@ void Board::store_accuracy() {
 }
 */
 
-// calculate scoring componenet (player's or bot's ships lefted)
+// return scoring componenet (player's or bot's ships lefted)
 double Board::score(){
     int count = 32;
     for (const auto& outerVec : ships) {
