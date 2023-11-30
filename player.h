@@ -24,10 +24,10 @@ public:
     void bot_attempts_neg4(mt19937& gen);
 
 private:
+    // methods used in attack and setup
     void state_set(char& direction, int& head_x, int& head_y, int& no_of_blocks, int state_no);
     void ship_set(char direction, int current_ship, int head_x, int head_y, int no_of_blocks);
     bool overlap(char& direction, int& head_x, int& head_y, int& no_of_blocks);
-    
     bool bot_overlap(int x, int y);
     void hit(int cursor_x, int cursor_y);
 

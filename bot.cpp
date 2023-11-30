@@ -231,10 +231,10 @@ bool Bot::player_attack(WINDOW* win, bool& paused) {
                     }
                 case 27: // 27 means escape
                     state[attack_cursor_x][attack_cursor_y] = prev_state;
-                    if (this->confirmQuit()){
+                    if (this->confirmQuit()){ // if quit then return true
                         return true;
                     }
-                    else {
+                    else { // if return to game then set paused to true, which tells the game to continue player's turn
                         paused = true;
                         return false;    
                     }

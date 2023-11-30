@@ -492,6 +492,7 @@ void Player::bot_attack(){
         }
 }
 
+// called when game is in set up stage
 bool Player::setup() {
 
     // create new window for set up
@@ -588,7 +589,7 @@ bool Player::setup() {
                         break;
                     }
                 case 27: // 27 means escape
-                    if (this->confirmQuit()) {
+                    if (this->confirmQuit()) { // if quit then erase the windows content
                         werase(win);
                         wrefresh(win);
                         werase(instruction);
@@ -617,8 +618,6 @@ bool Player::setup() {
     delwin(instruction);
     clear();
     move(0, 0);
-    // refresh();
-    // printw("set up finished\n");
     refresh();
     return false;
 }

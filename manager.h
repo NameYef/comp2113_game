@@ -10,6 +10,7 @@ using namespace std;
 
 class Manager {
 public:
+    // methods
     Manager();
     ~Manager();
     void game_setup(); // pregame setup
@@ -22,14 +23,11 @@ public:
     void update_score_time(double duration, string name);
     string enter_name();
 private:
+    // variables
     // creating player and bot pointer
     Player* player;
     Bot* bot;
-    
-    
     string previous_player; // this will be used to implement the turn based mechanics
-    int ymax;
-    int xmax; //xmax is 202
     bool paused;
     double duration;
 };
